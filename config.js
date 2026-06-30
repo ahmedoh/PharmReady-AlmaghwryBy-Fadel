@@ -8,7 +8,7 @@
  *    using browser LocalStorage, allowing you to test everything immediately without Google Sheets!
  */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzFIeLa-FZ5EJWsagM7eIunLXIE-wkopvoKsvau7Jm76B2ZdDGR2Iglf34xEdXOhSZJ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwYcSrLslXgn6SXyukWpGeDDUU7TT9HJwHk0G-u0s78x55KXRlQX5RT5CSmaFiJHzID/exec";
 
 // Check if we are running in Demo Mode (checks if placeholder is still present)
 const isDemoMode = !API_URL || API_URL.includes("YOUR_GOOGLE_APPS_SCRIPT");
@@ -482,15 +482,12 @@ function handleDemoRequest(params) {
       return { success: false, message: "غير مصرح بالعملية." };
     }
     const admins = getTable("Admins");
-    
-    // التعديل هنا: حماية الكود من القيم الفارغة لمنع توقف السكربت
     admins.push({
       Timestamp: new Date().toISOString(),
-      Username: params.username ? String(params.username).trim() : "",
-      Password: params.password ? String(params.password).trim() : "",
+      Username: params.username.trim(),
+      Password: params.password.trim(),
       Role: params.role || "Admin"
     });
-    
     saveTable("Admins", admins);
     return { success: true, message: "تم إضافة المدير الجديد بنجاح." };
 
