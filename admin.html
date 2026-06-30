@@ -487,10 +487,10 @@
       }
     };
 
-    const adminPassword = sessionStorage.getItem("admin_password");
+    const adminPassword = sessionStorage.getItem("admin_password") ? sessionStorage.getItem("admin_password").trim().toLowerCase() : "";
     const adminLoggedIn = sessionStorage.getItem("admin_logged_in");
 
-    if (!adminLoggedIn || adminPassword !== "2486") {
+    if (!adminLoggedIn || adminPassword !== "madmody") {
       window.location.href = "index.html";
     }
 

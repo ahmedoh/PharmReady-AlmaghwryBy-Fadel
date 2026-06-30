@@ -160,7 +160,7 @@
     // Form Submission
     document.getElementById("admin-login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const password = document.getElementById("admin-password").value.trim();
+      const password = document.getElementById("admin-password").value.trim().toLowerCase();
 
       const btnSubmit = e.target.querySelector("button[type='submit']");
       const originalText = btnSubmit.innerHTML;
