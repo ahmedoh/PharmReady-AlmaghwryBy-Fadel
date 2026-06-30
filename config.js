@@ -8,10 +8,10 @@
  *    using browser LocalStorage, allowing you to test everything immediately without Google Sheets!
  */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxBtQhRO0HYZM8udwsGxHOSB-_LkpPFknu0xTiU2TI8yhc4hVkb7K2RgcqF7QlRYtCf/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw9zln-g87fC5nXvIDhFYWYOkdWk99zQPK020pMVmgZEbsaJVU8_x8cveY3M3RRDwCk/exec";
 
 // Check if we are running in Demo Mode
-const isDemoMode = !API_URL || API_URL.includes("YOUR_GOOGLE_APPS_SCRIPT");
+const isDemoMode = !API_URL || API_URL.includes("https://script.google.com/macros/s/AKfycbw9zln-g87fC5nXvIDhFYWYOkdWk99zQPK020pMVmgZEbsaJVU8_x8cveY3M3RRDwCk/exec");
 
 console.log(isDemoMode ? "🚀 Running in DEMO MODE (using LocalStorage)" : "🌐 Running in CLOUD MODE (connected to Google Sheets)");
 
