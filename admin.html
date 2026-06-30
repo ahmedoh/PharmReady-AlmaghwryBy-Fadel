@@ -616,7 +616,7 @@
     const adminPassword = sessionStorage.getItem("admin_password") ? sessionStorage.getItem("admin_password").trim().toLowerCase() : "";
     const adminLoggedIn = sessionStorage.getItem("admin_logged_in");
 
-    if (!adminLoggedIn || adminPassword !== "madmody") {
+    if (!adminLoggedIn || !adminPassword) {
       window.location.href = "index.html";
     }
 
