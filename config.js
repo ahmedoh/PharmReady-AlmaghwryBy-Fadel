@@ -8,9 +8,9 @@
  *    using browser LocalStorage, allowing you to test everything immediately without Google Sheets!
  */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzsSK14NZysiqwRkwl1EB2DWl_9SVEEHDs5kzTofqsq0-AS9aj-U06S0J8J4ZLa9odR/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzbwRT49RMxOnHQ0eax27CQRajOgOMQvgvVX3spugLyBaNnJxB9sk_kzjzOSAsNQ6__/exec";
 
-// Check if we are running in Demo Mode
+// Check if we are running in Demo Mode (checks if placeholder is still present)
 const isDemoMode = !API_URL || API_URL.includes("YOUR_GOOGLE_APPS_SCRIPT");
 
 console.log(isDemoMode ? "🚀 Running in DEMO MODE (using LocalStorage)" : "🌐 Running in CLOUD MODE (connected to Google Sheets)");
@@ -561,6 +561,67 @@ function handleDemoRequest(params) {
       return { success: true, message: params.state === "blocked" ? "تم حظر الحساب بنجاح." : "تم تنشيط الحساب بنجاح." };
     }
     return { success: false, message: "لم يتم العثور على المتدرب." };
+
+  } else if (action === "submitTraineeReport") {
+    const trainees = getTable("Trainees");
+    const email = String(params.email).trim().toLowerCase();
+    const password = String(params.password).trim();
+    const t = trainees.find(x => String(x.Email).trim().toLowerCase() === email && String(x.Password).trim() === password);
+    if (!t || t.Status !== "accepted") {
+      return { success: false, message: "غير مصرح لتقديم التقارير." };
+    }
+    const reports = getTable("Reports");
+    reports.push({
+      Timestamp: new Date().toISOString(),
+      Email: email,
+      Name: t.Name,
+      Level: t.CurrentLevel || "Passengers",
+      Title: params.title || "تقرير تدريب بدون عنوان",
+      Content: params.content || "",
+      Attachment: params.attachment || "",
+      AttachmentName: params.attachmentName || "",
+      Status: "pending",
+      AdminComment: ""
+    });
+    saveTable("Reports", reports);
+    return { success: true, message: "تم تقديم التقرير بنجاح للمراجع." };
+
+  } else if (action === "getTraineeReports") {
+    const email = String(params.email).trim().toLowerCase();
+    const reports = getTable("Reports");
+    const filtered = reports.filter(x => String(x.Email).trim().toLowerCase() === email);
+    return { success: true, reports: filtered };
+
+  } else if (action === "adminGetReports") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
+      return { success: false, message: "غير مصرح بالدخول." };
+    }
+    return { success: true, reports: getTable("Reports") };
+
+  } else if (action === "adminUpdateReportStatus") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
+      return { success: false, message: "غير مصرح بالعملية." };
+    }
+    const reports = getTable("Reports");
+    const email = String(params.email).trim().toLowerCase();
+    const timestamp = String(params.timestamp).trim();
+    const status = params.status;
+    const comment = params.comment || "";
+
+    const rIndex = reports.findIndex(x => String(x.Email).trim().toLowerCase() === email && (String(x.Timestamp).indexOf(timestamp) !== -1 || String(new Date(x.Timestamp).getTime()) === String(new Date(timestamp).getTime())));
+    if (rIndex !== -1) {
+      reports[rIndex].Status = status;
+      reports[rIndex].AdminComment = comment;
+      saveTable("Reports", reports);
+      return { success: true, message: "تم تحديث حالة التقرير بنجاح." };
+    }
+    return { success: false, message: "لم يتم العثور على التقرير." };
+
+  } else if (action === "adminGetProgress") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
+      return { success: false, message: "غير مصرح بالدخول." };
+    }
+    return { success: true, progress: getTable("Progress") };
   }
 
   return { success: false, message: "Unknown action" };

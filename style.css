@@ -1,73 +1,94 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
 
 :root {
-  /* SAND GOLD THEME (Default Clone look from ta3llm-edu.com) */
-  --bg-primary: #FAF6EB; /* Warm beige from screenshot */
+  /* SAND GOLD THEME (Premium Soft Day look) */
+  --bg-primary: #FBFBF9; /* Extremely soft warm white/ivory */
   --bg-secondary: #ffffff;
   --bg-card: rgba(255, 255, 255, 0.95);
-  --border-color: rgba(182, 116, 28, 0.15);
-  --border-focus: #b6741c;
-  --text-main: #2b251d; /* Deep bronze gray */
-  --text-muted: #6b5f4f; /* Slate bronze gray */
+  --border-color: rgba(195, 159, 104, 0.18);
+  --border-focus: #C39F68;
+  --text-main: #1A1C20; /* Deep charcoal grey */
+  --text-muted: #62666E; /* Muted corporate grey */
   --text-inverse: #ffffff;
   
-  --color-primary: #b6741c; /* Bronze/gold from screenshot */
-  --color-primary-glow: rgba(182, 116, 28, 0.12);
-  --color-gold: #c5bd63; /* Olive gold from screenshot */
-  --color-gold-glow: rgba(197, 189, 99, 0.15);
-  --color-danger: #dc2626;
-  --color-danger-glow: rgba(220, 38, 38, 0.1);
+  --color-primary: #C39F68; /* Soft champagne gold */
+  --color-primary-glow: rgba(195, 159, 104, 0.12);
+  --color-gold: #D4AF37; /* Clean metallic gold */
+  --color-gold-glow: rgba(212, 175, 55, 0.08);
+  --color-danger: #e11d48;
+  --color-danger-glow: rgba(225, 29, 72, 0.08);
   
-  --shadow-sm: 0 2px 8px rgba(182, 116, 28, 0.04);
-  --shadow-md: 0 10px 25px rgba(182, 116, 28, 0.08);
-  --shadow-lg: 0 20px 40px rgba(182, 116, 28, 0.12);
+  --shadow-sm: 0 2px 8px rgba(195, 159, 104, 0.04);
+  --shadow-md: 0 10px 25px rgba(195, 159, 104, 0.06);
+  --shadow-lg: 0 20px 40px rgba(195, 159, 104, 0.1);
+
+  /* Background decorations color & opacity in light mode: darker & visible */
+  --bg-decor-color: #735e4d;
+  --bg-decor-opacity: 0.12;
   
   --font-family: 'Cairo', sans-serif;
   --transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* GREEN THEME (Comfortable Mint Green option) */
+/* GREEN THEME (Premium Soft Mint Green option) */
 body.green-theme {
-  --bg-primary: #f0fdf4; /* Very soft light green */
+  --bg-primary: #F4F9F6; /* Calming sage/mint white */
   --bg-secondary: #ffffff;
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --border-color: rgba(16, 185, 129, 0.15);
-  --border-focus: #10b981;
-  --text-main: #064e3b; /* Deep forest green */
-  --text-muted: #475569; /* Slate grey */
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --border-color: rgba(46, 125, 99, 0.15);
+  --border-focus: #2E7D63;
+  --text-main: #1C2E28; /* Dark forest slate */
+  --text-muted: #52635E; /* Muted forest grey */
   --text-inverse: #ffffff;
   
-  --color-primary: #10b981; /* Medical Emerald Green */
-  --color-primary-glow: rgba(16, 185, 129, 0.15);
-  --color-gold: #d97706; /* Dark Amber */
-  --color-gold-glow: rgba(217, 119, 6, 0.1);
+  --color-primary: #2E7D63; /* Elegant slate mint green */
+  --color-primary-glow: rgba(46, 125, 99, 0.1);
+  --color-gold: #B58900; /* Darker amber gold */
+  --color-gold-glow: rgba(181, 137, 0, 0.08);
   
-  --shadow-sm: 0 2px 8px rgba(16, 185, 129, 0.04);
-  --shadow-md: 0 10px 25px rgba(16, 185, 129, 0.08);
-  --shadow-lg: 0 20px 40px rgba(16, 185, 129, 0.12);
+  --shadow-sm: 0 2px 8px rgba(46, 125, 99, 0.04);
+  --shadow-md: 0 10px 25px rgba(46, 125, 99, 0.06);
+  --shadow-lg: 0 20px 40px rgba(46, 125, 99, 0.1);
+
+  /* Mint mode bg decorations: dark forest green */
+  --bg-decor-color: #1C2E28;
+  --bg-decor-opacity: 0.12;
 }
 
-/* DARK THEME VARIABLES (Activated via class on body) */
+/* DARK THEME VARIABLES (Premium Matte Dark option) */
 body.dark-theme {
-  --bg-primary: #0b0f19;
-  --bg-secondary: #131b2e;
-  --bg-card: rgba(26, 36, 60, 0.65);
+  --bg-primary: #0D0E12; /* Clean deep matte black */
+  --bg-secondary: #151821; /* Dark slate card background */
+  --bg-card: rgba(21, 24, 33, 0.85);
   --border-color: rgba(255, 255, 255, 0.08);
-  --border-focus: #b6741c;
-  --text-main: #f8fafc; /* White/off-white */
-  --text-muted: #94a3b8; /* Cool grey */
-  --text-inverse: #0b0f19;
+  --border-focus: #E8C48C;
+  --text-main: #E2E8F0; /* Soft off-white */
+  --text-muted: #8E95A5; /* Slate grey */
+  --text-inverse: #0D0E12;
   
-  --color-primary: #b6741c;
-  --color-primary-glow: rgba(182, 116, 28, 0.25);
-  --color-gold: #fbbf24; /* Glowing gold in dark mode */
-  --color-gold-glow: rgba(251, 191, 36, 0.2);
-  --color-danger: #ef4444;
-  --color-danger-glow: rgba(239, 68, 68, 0.25);
+  --color-primary: #E8C48C; /* Warm cream gold */
+  --color-primary-glow: rgba(232, 196, 140, 0.15);
+  --color-gold: #F3D082; /* Soft glowing gold */
+  --color-gold-glow: rgba(243, 208, 130, 0.1);
+  --color-danger: #f43f5e;
+  --color-danger-glow: rgba(244, 63, 94, 0.15);
   
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
-  --shadow-md: 0 10px 25px rgba(0,0,0,0.3);
-  --shadow-lg: 0 20px 40px rgba(0,0,0,0.4);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-md: 0 10px 25px rgba(0,0,0,0.4);
+  --shadow-lg: 0 20px 40px rgba(0,0,0,0.5);
+
+  /* Dark mode bg decorations: bright white with low opacity */
+  --bg-decor-color: #FFFFFF;
+  --bg-decor-opacity: 0.06;
+}
+
+/* CSS override for background SVGs decorations across themes */
+.bg-decorations-wrapper svg,
+.ta3llm-hero-wrapper svg.doodle-book,
+.ta3llm-hero-wrapper svg.doodle-pencil {
+  color: var(--bg-decor-color) !important;
+  opacity: var(--bg-decor-opacity) !important;
+  transition: color 0.4s ease, opacity 0.4s ease;
 }
 
 /* LEVEL THEME ACCENTS */
@@ -2372,9 +2393,122 @@ body[dir="ltr"] .newsletter-form button {
   height: 100%;
   z-index: 99;
   background: transparent;
-  cursor: default;
+  cursor: pointer;
   pointer-events: auto;
 }
+
+/* Watermark Overlay styling update */
+.security-watermark {
+  position: absolute;
+  pointer-events: none;
+  font-size: 13px;
+  color: rgba(251, 191, 36, 0.4) !important; /* Semi-transparent gold amber */
+  background: rgba(0, 0, 0, 0.6) !important; /* Dark solid contrast box */
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: 'Cairo', sans-serif;
+  font-weight: bold;
+  z-index: 99999 !important; /* Ensure it stays on top of iframe */
+  white-space: nowrap;
+  animation: watermarkMove 25s linear infinite;
+  display: flex;
+  gap: 8px;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+@keyframes watermarkMove {
+  0% { top: 5%; left: 5%; }
+  10% { top: 20%; left: 60%; }
+  20% { top: 80%; left: 10%; }
+  30% { top: 40%; left: 65%; }
+  40% { top: 70%; left: 80%; }
+  50% { top: 15%; left: 30%; }
+  60% { top: 60%; left: 50%; }
+  70% { top: 85%; left: 20%; }
+  80% { top: 30%; left: 75%; }
+  90% { top: 75%; left: 40%; }
+  100% { top: 5%; left: 5%; }
+}
+
+/* Custom player controls bar */
+.custom-player-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 15px;
+  z-index: 100;
+  transition: opacity 0.3s;
+}
+
+/* Hide controls when mouse leaves the player wrapper */
+.video-player-container:not(:hover) .custom-player-controls {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.control-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ctrl-progress-container {
+  flex: 1;
+  position: relative;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.ctrl-progress-container input[type="range"] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 10;
+  margin: 0;
+}
+
+.ctrl-progress-bar {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 3px;
+  width: 0;
+}
+
+.ctrl-time {
+  color: #fff;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.custom-player-controls input[type="range"] {
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
 
 
 

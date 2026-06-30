@@ -89,6 +89,16 @@ function handleRequest(e) {
       responseData = adminEditTrainee(sheet, params);
     } else if (action === "adminToggleBlockTrainee") {
       responseData = adminToggleBlockTrainee(sheet, params);
+    } else if (action === "submitTraineeReport") {
+      responseData = submitTraineeReport(sheet, params);
+    } else if (action === "getTraineeReports") {
+      responseData = getTraineeReports(sheet, params);
+    } else if (action === "adminGetReports") {
+      responseData = adminGetReports(sheet, params);
+    } else if (action === "adminUpdateReportStatus") {
+      responseData = adminUpdateReportStatus(sheet, params);
+    } else if (action === "adminGetProgress") {
+      responseData = adminGetProgress(sheet, params);
     }
     
     return ContentService.createTextOutput(JSON.stringify(responseData))
@@ -131,6 +141,10 @@ function initSheets(spreadsheet) {
     {
       name: "Questions",
       headers: ["Timestamp", "Level", "QuestionAr", "QuestionEn", "Option1Ar", "Option1En", "Option2Ar", "Option2En", "Option3Ar", "Option3En", "CorrectIndex"]
+    },
+    {
+      name: "Reports",
+      headers: ["Timestamp", "Email", "Name", "Level", "Title", "Content", "Attachment", "AttachmentName", "Status", "AdminComment"]
     }
   ];
   
@@ -759,3 +773,110 @@ function adminToggleBlockTrainee(sheet, params) {
   }
   return { success: false, message: "لم يتم العثور على المتدرب." };
 }
+
+function submitTraineeReport(sheet, params) {
+  var email = String(params.email).trim().toLowerCase();
+  var password = String(params.password).trim();
+  
+  var trainees = getSheetData(sheet, "Trainees");
+  var trainee = null;
+  for (var i = 0; i < trainees.length; i++) {
+    if (String(trainees[i].Email).trim().toLowerCase() === email && String(trainees[i].Password).trim() === password) {
+      trainee = trainees[i];
+      break;
+    }
+  }
+  if (!trainee || trainee.Status !== "accepted") {
+    return { success: false, message: "غير مصرح للمستخدم بتقديم التقارير." };
+  }
+  
+  var reportsSh = sheet.getSheetByName("Reports");
+  reportsSh.appendRow([
+    new Date(),
+    email,
+    trainee.Name,
+    trainee.CurrentLevel || "Passengers",
+    params.title || "تقرير تدريب بدون عنوان",
+    params.content || "",
+    params.attachment || "",
+    params.attachmentName || "",
+    "pending",
+    ""
+  ]);
+  return { success: true, message: "تم تقديم التقرير بنجاح للمراجع." };
+}
+
+function getTraineeReports(sheet, params) {
+  var email = String(params.email).trim().toLowerCase();
+  var password = String(params.password).trim();
+  
+  var trainees = getSheetData(sheet, "Trainees");
+  var authorized = false;
+  for (var i = 0; i < trainees.length; i++) {
+    if (String(trainees[i].Email).trim().toLowerCase() === email && String(trainees[i].Password).trim() === password) {
+      authorized = true;
+      break;
+    }
+  }
+  if (!authorized) {
+    return { success: false, message: "غير مصرح بالدخول." };
+  }
+  
+  var reports = getSheetData(sheet, "Reports");
+  var filtered = [];
+  for (var j = 0; j < reports.length; j++) {
+    if (String(reports[j].Email).trim().toLowerCase() === email) {
+      filtered.push(reports[j]);
+    }
+  }
+  return { success: true, reports: filtered };
+}
+
+function adminGetReports(sheet, params) {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
+    return { success: false, message: "غير مصرح بالدخول." };
+  }
+  var reports = getSheetData(sheet, "Reports");
+  return { success: true, reports: reports };
+}
+
+function adminUpdateReportStatus(sheet, params) {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
+    return { success: false, message: "غير مصرح بالعملية." };
+  }
+  var reportsSh = sheet.getSheetByName("Reports");
+  var reports = getSheetData(sheet, "Reports");
+  var email = String(params.email).trim().toLowerCase();
+  var timestamp = String(params.timestamp).trim();
+  var status = params.status; // "accepted", "needs_revision", "rejected"
+  var comment = params.comment || "";
+  
+  for (var i = 0; i < reports.length; i++) {
+    var r = reports[i];
+    if (String(r.Email).trim().toLowerCase() === email && (String(r.Timestamp).indexOf(timestamp) !== -1 || String(new Date(r.Timestamp).getTime()) === String(new Date(timestamp).getTime()))) {
+      reportsSh.getRange(r.rowNum, 9).setValue(status);
+      reportsSh.getRange(r.rowNum, 10).setValue(comment);
+      return { success: true, message: "تم تحديث حالة التقرير بنجاح." };
+    }
+  }
+  
+  if (params.rowNum) {
+    var row = parseInt(params.rowNum);
+    if (row > 1) {
+      reportsSh.getRange(row, 9).setValue(status);
+      reportsSh.getRange(row, 10).setValue(comment);
+      return { success: true, message: "تم تحديث حالة التقرير بنجاح." };
+    }
+  }
+  
+  return { success: false, message: "لم يتم العثور على التقرير المطلوب." };
+}
+
+function adminGetProgress(sheet, params) {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
+    return { success: false, message: "غير مصرح بالدخول." };
+  }
+  var progress = getSheetData(sheet, "Progress");
+  return { success: true, progress: progress };
+}
+
