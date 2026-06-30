@@ -1,5 +1,5 @@
 /**
- * PharmReady-AlmaghwryBy-Fadel - Updated Backend Database Script
+ * PharmReady-AlmaghwryBy-Fadel - Cloud Database Script
  * Copy this code into Google Apps Script (Extensions -> Apps Script in your Google Sheet)
  * Then deploy it as a Web App: 
  * - Execute as: Me
@@ -15,7 +15,6 @@ function doPost(e) {
 }
 
 function handleRequest(e) {
-  // CORS Headers
   var headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -24,15 +23,12 @@ function handleRequest(e) {
   
   try {
     var params = {};
-    
-    // Parse request parameters
     if (e.parameter && Object.keys(e.parameter).length > 0) {
       params = e.parameter;
     } else if (e.postData && e.postData.contents) {
       try {
         params = JSON.parse(e.postData.contents);
       } catch (err) {
-        // Fallback for form URL encoded
         var parts = e.postData.contents.split('&');
         for (var i = 0; i < parts.length; i++) {
           var pair = parts[i].split('=');
@@ -44,13 +40,9 @@ function handleRequest(e) {
     var action = params.action;
     var responseData = { success: false, message: "Invalid action: " + action };
     
-    // Connect to Google Sheet
     var sheet = SpreadsheetApp.getActiveSpreadsheet();
-    
-    // Initialize Sheets if they don't exist
     initSheets(sheet);
     
-    // Action router
     if (action === "register") {
       responseData = registerTrainee(sheet, params);
     } else if (action === "checkStatus") {
@@ -66,7 +58,7 @@ function handleRequest(e) {
     } else if (action === "submitPromotionRequest") {
       responseData = submitPromotionRequest(sheet, params);
     } else if (action === "adminLogin") {
-      responseData = adminLogin(params);
+      responseData = adminLogin(sheet, params);
     } else if (action === "adminGetTrainees") {
       responseData = adminGetTrainees(sheet, params);
     } else if (action === "adminAction") {
@@ -83,6 +75,20 @@ function handleRequest(e) {
       responseData = adminGetPromotions(sheet, params);
     } else if (action === "adminApprovePromotion") {
       responseData = adminApprovePromotion(sheet, params);
+    } else if (action === "adminGetAdmins") {
+      responseData = adminGetAdmins(sheet, params);
+    } else if (action === "adminAddAdmin") {
+      responseData = adminAddAdmin(sheet, params);
+    } else if (action === "adminGetQuestions") {
+      responseData = adminGetQuestions(sheet, params);
+    } else if (action === "adminAddQuestion") {
+      responseData = adminAddQuestion(sheet, params);
+    } else if (action === "adminDeleteQuestion") {
+      responseData = adminDeleteQuestion(sheet, params);
+    } else if (action === "adminEditTrainee") {
+      responseData = adminEditTrainee(sheet, params);
+    } else if (action === "adminToggleBlockTrainee") {
+      responseData = adminToggleBlockTrainee(sheet, params);
     }
     
     return ContentService.createTextOutput(JSON.stringify(responseData))
@@ -96,7 +102,6 @@ function handleRequest(e) {
   }
 }
 
-// Initialize sheets if they do not exist
 function initSheets(spreadsheet) {
   var sheetsNeeded = [
     { 
@@ -118,6 +123,14 @@ function initSheets(spreadsheet) {
     { 
       name: "Notifications", 
       headers: ["Timestamp", "Name", "Email", "NewPassword"] 
+    },
+    {
+      name: "Admins",
+      headers: ["Timestamp", "Username", "Password", "Role"]
+    },
+    {
+      name: "Questions",
+      headers: ["Timestamp", "Level", "QuestionAr", "QuestionEn", "Option1Ar", "Option1En", "Option2Ar", "Option2En", "Option3Ar", "Option3En", "CorrectIndex"]
     }
   ];
   
@@ -127,11 +140,46 @@ function initSheets(spreadsheet) {
       sh = spreadsheet.insertSheet(s.name);
       sh.appendRow(s.headers);
       sh.setFrozenRows(1);
+      
+      // Seed default questions if Questions sheet is new
+      if (s.name === "Questions") {
+        seedDefaultQuestions(sh);
+      }
+      
+      // Seed default admin if Admins sheet is new
+      if (s.name === "Admins") {
+        sh.appendRow([new Date(), "madmody", "madmody", "Owner"]);
+      }
     }
   });
 }
 
-// Helper to convert sheet rows into array of objects
+function seedDefaultQuestions(sh) {
+  var defaultQuestions = [
+    // Passengers (Level 0)
+    ["Passengers", "ما هو الهدف الأساسي من آداب وأخلاقيات مهنة الصيدلة؟", "What is the primary goal of pharmacy professional ethics?", "زيادة أرباح الصيدلية المادية بأي طريقة كانت.", "Increasing pharmacy profits by any means.", "تقديم مصلحة ورعاية المريض بأعلى معايير الأمان والأخلاق.", "Prioritizing patient care and safety with the highest ethical standards.", "التنافس غير الشريف مع الصيدليات المجاورة.", "Unfair competition with neighboring pharmacies.", "1"],
+    ["Passengers", "ما هي درجة الحرارة المناسبة لتخزين الأنسولين واللقاحات الحيوية؟", "What is the appropriate storage temperature for insulin and vaccines?", "في درجة حرارة الغرفة العادية (25 مئوية).", "At normal room temperature (25°C).", "تحت الصفر المطلق في الفريزر.", "Below zero in the freezer.", "في الثلاجة بين درجة حرارة 2 إلى 8 درجات مئوية.", "In the refrigerator between 2°C and 8°C.", "2"],
+    ["Passengers", "أين تقع جميع فروع صيدليات آل مغاوري؟", "Where are all El-Maghawry Pharmacies branches located?", "في مدينة دمياط القديمة", "In Old Damietta city", "في مدينة دمياط الجديدة فقط", "In New Damietta city only", "في القاهرة والإسكندرية", "In Cairo and Alexandria", "1"],
+    
+    // Starters (Level 1)
+    ["Starters", "ما هو البروتوكول الأولي المعتمد للتعامل مع حرق من الدرجة الأولى؟", "What is the primary protocol to handle a first-degree burn?", "وضع معجون الأسنان أو الزبدة مباشرة فوق موضع الحرق.", "Applying toothpaste or butter directly onto the burn site.", "وضع ماء جاري فاتر لمدة 10-15 دقيقة ثم استخدام مرهم حروق.", "Placing under cool running water for 10-15 minutes, then using a burn ointment.", "تغطية الحرق بلاصق طبي غير معقم فوراً.", "Covering the burn immediately with a non-sterile adhesive tape.", "1"],
+    ["Starters", "أي المجموعات الدوائية التالية تستخدم لخفض الحرارة وتسكين الآلام بأمان للأطفال؟", "Which of the following drug classes is used to safely reduce fever and relieve pain in children?", "مادة الباراسيتامول بالجرعة المحسوبة حسب وزن الطفل.", "Paracetamol in a calculated dose based on the child's weight.", "مادة الأسبرين بجرعات كبيرة لضمان سرعة المفعول.", "Aspirin in high doses to guarantee quick action.", "مضادات الالتهاب غير الستيرويدية دون استشارة طبية.", "Non-steroidal anti-inflammatory drugs (NSAIDs) without medical consultation.", "0"],
+    
+    // Movers (Level 2)
+    ["Movers", "ما هو التحذير الحرج للغاية الذي يجب توجيهه للمريض عند صرف مضاد حيوي من عائلة (Fluoroquinolones)؟", "What is the highly critical warning when dispensing a Fluoroquinolone antibiotic?", "عدم تناوله مع الحليب أو المكملات المحتوية على الكالسيوم أو الحديد لأنه يقلل امتصاصه.", "Do not take with milk or calcium/iron supplements as it reduces absorption.", "ضرورة تناوله مع عصائر الحمضيات المركزة لزيادة قوته.", "Must be taken with concentrated citrus juices to increase strength.", "تناوله مع القهوة والشاي فقط لتجنب الدوخة.", "Take it with coffee and tea only to avoid dizziness.", "0"],
+    
+    // Flyers (Level 3)
+    ["Flyers", "عند تحضير تركيبة صيدلانية تجميلية تحتوي على فيتامين C، كيف يجب حماية المستحضر من الأكسدة؟", "When preparing a formulation containing Vitamin C, how should you protect it from oxidation?", "تعبئته في عبوات زجاجية معتمة أو داكنة اللون، وحفظه في مكان بارد وبعيد عن الضوء والهواء.", "Packaging it in opaque or dark amber glass bottles, storing it in a cool place away from light and air.", "إضافة كميات كبيرة من الكحول الطبي لتعقيم المحلول.", "Adding large amounts of rubbing alcohol to sterilize the solution.", "تركه معرضاً للهواء المباشر والضوء لتنشيط الجزيئات.", "Leaving it exposed to direct air and light to activate vitamin molecules.", "0"],
+    
+    // Beast (Level 4)
+    ["Beast", "ما هي المعادلة الذهبية المتبعة لإدارة طلبيات الأدوية والنواقص في الصيدلية لضمان عدم ركود البضائع؟", "What is the golden equation for managing drug orders and shortages in the pharmacy to avoid stagnant stock?", "شراء كميات ضخمة من جميع الأصناف دون النظر لمعدل الاستهلاك اليومي.", "Buying huge quantities of all items regardless of daily consumption rate.", "حساب معدل السحب اليومي والشهري لكل صنف، والطلب بناءً على حد الأمان والطلب الأدنى (Min/Max Level).", "Calculating daily/monthly consumption for each item and ordering based on Min/Max safety levels.", "إيقاف الطلبيات تماماً والاعتماد فقط على التبادل.", "Stopping orders completely and relying solely on stock swaps.", "1"]
+  ];
+  
+  defaultQuestions.forEach(function(q) {
+    sh.appendRow([new Date()].concat(q));
+  });
+}
+
 function getSheetData(sheet, sheetName) {
   var sh = sheet.getSheetByName(sheetName);
   if (!sh) return [];
@@ -146,32 +194,28 @@ function getSheetData(sheet, sheetName) {
     for (var j = 0; j < headers.length; j++) {
       row[headers[j]] = data[i][j];
     }
-    row.rowNum = i + 1; // 1-indexed row number in sheet
+    row.rowNum = i + 1;
     rows.push(row);
   }
   return rows;
 }
 
-// 1. Register a Trainee
 function registerTrainee(sheet, params) {
   var sh = sheet.getSheetByName("Trainees");
   var trainees = getSheetData(sheet, "Trainees");
-  
-  // Check if phone number already exists
   var phone = String(params.phone).trim();
+  
   for (var i = 0; i < trainees.length; i++) {
     if (String(trainees[i].Phone).trim() === phone) {
       return { success: false, message: "رقم الهاتف هذا مسجل بالفعل في النظام!" };
     }
   }
   
-  // Verify safety question
   var securityAnswer = String(params.securityAnswer).trim();
   if (securityAnswer !== "1") {
     return { success: false, message: "إجابة سؤال الأمان خاطئة. يرجى التأكد من الإجابة الصحيحة." };
   }
   
-  // Default current level is chosen level (or passengers if not provided)
   var targetLevel = params.targetLevel || "Passengers";
   
   sh.appendRow([
@@ -185,17 +229,16 @@ function registerTrainee(sheet, params) {
     params.squad,
     params.university,
     params.trainingBranch,
-    "pending", // Status
-    "",        // Generated Email
-    "",        // Generated Password
-    "",        // Reject Reason
-    targetLevel // CurrentLevel
+    "pending",
+    "",
+    "",
+    "",
+    targetLevel
   ]);
   
   return { success: true, message: "تم تسجيل البيانات بنجاح في نظام المراجعة." };
 }
 
-// 2. Check Status by Phone
 function checkStatus(sheet, params) {
   var trainees = getSheetData(sheet, "Trainees");
   var phone = String(params.phone).trim();
@@ -217,7 +260,6 @@ function checkStatus(sheet, params) {
   return { success: false, message: "رقم الهاتف هذا غير مسجل في النظام." };
 }
 
-// 3. Login Trainee
 function loginTrainee(sheet, params) {
   var trainees = getSheetData(sheet, "Trainees");
   var email = String(params.email).trim().toLowerCase();
@@ -225,23 +267,27 @@ function loginTrainee(sheet, params) {
   
   for (var i = 0; i < trainees.length; i++) {
     var t = trainees[i];
-    if (t.Status === "accepted" && String(t.Email).trim().toLowerCase() === email && String(t.Password).trim() === password) {
-      return {
-        success: true,
-        trainee: {
-          name: t.Name,
-          email: t.Email,
-          phone: t.Phone,
-          branch: t.TrainingBranch,
-          level: t.CurrentLevel || "Passengers"
-        }
-      };
+    if (String(t.Email).trim().toLowerCase() === email && String(t.Password).trim() === password) {
+      if (t.Status === "blocked") {
+        return { success: false, message: "تم حظر هذا الحساب من قبل الإدارة!" };
+      }
+      if (t.Status === "accepted") {
+        return {
+          success: true,
+          trainee: {
+            name: t.Name,
+            email: t.Email,
+            phone: t.Phone,
+            branch: t.TrainingBranch,
+            level: t.CurrentLevel || "Passengers"
+          }
+        };
+      }
     }
   }
   return { success: false, message: "البريد الإلكتروني أو كلمة المرور غير صحيحة، أو أن حسابك لم يتم قبوله بعد." };
 }
 
-// 4. Change Password
 function changePassword(sheet, params) {
   var sh = sheet.getSheetByName("Trainees");
   var trainees = getSheetData(sheet, "Trainees");
@@ -252,16 +298,10 @@ function changePassword(sheet, params) {
   for (var i = 0; i < trainees.length; i++) {
     var t = trainees[i];
     if (String(t.Email).trim().toLowerCase() === email && String(t.Password).trim() === oldPassword) {
-      sh.getRange(t.rowNum, 13).setValue(newPassword); // Column 13 is Password
+      sh.getRange(t.rowNum, 13).setValue(newPassword);
       
-      // Log notification
       var notifSh = sheet.getSheetByName("Notifications");
-      notifSh.appendRow([
-        new Date(),
-        t.Name,
-        t.Email,
-        newPassword
-      ]);
+      notifSh.appendRow([new Date(), t.Name, t.Email, newPassword]);
       
       return { success: true, message: "تم تغيير كلمة المرور بنجاح." };
     }
@@ -269,7 +309,6 @@ function changePassword(sheet, params) {
   return { success: false, message: "كلمة المرور الحالية غير صحيحة." };
 }
 
-// 5. Get Trainee Videos, Watched Progress and Completed Levels
 function getTraineeVideos(sheet, params) {
   var trainees = getSheetData(sheet, "Trainees");
   var email = String(params.email).trim().toLowerCase();
@@ -291,7 +330,6 @@ function getTraineeVideos(sheet, params) {
   var currentLevel = activeTrainee.CurrentLevel || "Passengers";
   var videos = getSheetData(sheet, "Videos");
   
-  // Filter videos that belong to their current level
   var filteredVideos = [];
   for (var v = 0; v < videos.length; v++) {
     if (String(videos[v].Level || "Passengers").trim() === currentLevel) {
@@ -299,7 +337,6 @@ function getTraineeVideos(sheet, params) {
     }
   }
   
-  // Get watched progress for this student
   var progress = getSheetData(sheet, "Progress");
   var watchedIds = [];
   for (var j = 0; j < progress.length; j++) {
@@ -308,7 +345,6 @@ function getTraineeVideos(sheet, params) {
     }
   }
   
-  // Get approved promotions (to know completed levels and certificates)
   var promotions = getSheetData(sheet, "Promotions");
   var completedLevels = [];
   for (var p = 0; p < promotions.length; p++) {
@@ -317,7 +353,6 @@ function getTraineeVideos(sheet, params) {
     }
   }
   
-  // Check if there is a pending promotion request
   var pendingPromotion = false;
   for (var p = 0; p < promotions.length; p++) {
     if (String(promotions[p].Email).trim().toLowerCase() === email && promotions[p].Status === "pending") {
@@ -326,17 +361,48 @@ function getTraineeVideos(sheet, params) {
     }
   }
   
+  // Return exam questions loaded dynamically from sheet for their level
+  var allQuestions = getSheetData(sheet, "Questions");
+  var levelQuestions = [];
+  for (var q = 0; q < allQuestions.length; q++) {
+    if (String(allQuestions[q].Level).trim() === currentLevel) {
+      levelQuestions.push({
+        q: allQuestions[q].QuestionAr,
+        q_en: allQuestions[q].QuestionEn,
+        options: [allQuestions[q].Option1Ar, allAllOption(allQuestions[q].Option2Ar), allAllOption(allQuestions[q].Option3Ar)].filter(Boolean),
+        options_en: [allQuestions[q].Option1En, allAllOption(allQuestions[q].Option2En), allAllOption(allQuestions[q].Option3En)].filter(Boolean),
+        correct: parseInt(allQuestions[q].CorrectIndex) || 0
+      });
+    }
+  }
+  
+  // Helper to filter empty options
+  function allAllOption(val) {
+    return val && String(val).trim() ? String(val).trim() : "";
+  }
+  
+  // Re-format levelQuestions slightly to match frontend expected structure
+  var cleanQuestions = levelQuestions.map(function(item) {
+    return {
+      q: item.q,
+      q_en: item.q_en,
+      options: item.options.filter(function(o) { return o !== ""; }),
+      options_en: item.options_en.filter(function(o) { return o !== ""; }),
+      correct: item.correct
+    };
+  });
+  
   return {
     success: true,
     videos: filteredVideos,
     watched: watchedIds,
     currentLevel: currentLevel,
     completedLevels: completedLevels,
-    pendingPromotion: pendingPromotion
+    pendingPromotion: pendingPromotion,
+    questions: cleanQuestions
   };
 }
 
-// 6. Update Video Progress
 function updateProgress(sheet, params) {
   var trainees = getSheetData(sheet, "Trainees");
   var email = String(params.email).trim().toLowerCase();
@@ -358,27 +424,21 @@ function updateProgress(sheet, params) {
   
   var progressSh = sheet.getSheetByName("Progress");
   var progress = getSheetData(sheet, "Progress");
-  
-  var alreadyExists = false;
-  for (var j = 0; j < progress.length; j++) {
-    if (String(progress[j].Email).trim().toLowerCase() === email && String(progress[j].VideoId).trim() === videoId) {
-      alreadyExists = true;
+  var alreadyWatched = false;
+  for (var k = 0; k < progress.length; k++) {
+    if (String(progress[k].Email).trim().toLowerCase() === email && String(progress[k].VideoId).trim() === videoId) {
+      alreadyWatched = true;
       break;
     }
   }
   
-  if (!alreadyExists) {
-    progressSh.appendRow([
-      new Date(),
-      email,
-      videoId
-    ]);
+  if (!alreadyWatched) {
+    progressSh.appendRow([new Date(), email, videoId]);
   }
   
   return { success: true, message: "تم تسجيل إتمام المشاهدة بنجاح." };
 }
 
-// 7. Submit level promotion request
 function submitPromotionRequest(sheet, params) {
   var trainees = getSheetData(sheet, "Trainees");
   var email = String(params.email).trim().toLowerCase();
@@ -402,7 +462,6 @@ function submitPromotionRequest(sheet, params) {
   var promotionsSh = sheet.getSheetByName("Promotions");
   var promotions = getSheetData(sheet, "Promotions");
   
-  // Check if there is already a pending or approved request for this transition
   for (var j = 0; j < promotions.length; j++) {
     var p = promotions[j];
     if (String(p.Email).trim().toLowerCase() === email && String(p.FromLevel).trim() === fromLevel && String(p.ToLevel).trim() === toLevel) {
@@ -414,56 +473,58 @@ function submitPromotionRequest(sheet, params) {
     }
   }
   
-  promotionsSh.appendRow([
-    new Date(),
-    email,
-    fromLevel,
-    toLevel,
-    "pending"
-  ]);
-  
+  promotionsSh.appendRow([new Date(), email, fromLevel, toLevel, "pending"]);
   return { success: true, message: "تم إرسال طلب الترقية وإصدار الشهادة بنجاح للمدير." };
 }
 
-// 8. Admin Login
-function adminLogin(params) {
-  var password = String(params.password).trim();
-  if (password === "madmody") {
+function verifyAdminCredential(sheet, adminPassword) {
+  var pass = String(adminPassword).trim().toLowerCase();
+  if (pass === "madmody") return true; // Creator/owner fallback
+  
+  var admins = getSheetData(sheet, "Admins");
+  for (var i = 0; i < admins.length; i++) {
+    if (String(admins[i].Password).trim().toLowerCase() === pass) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function adminLogin(sheet, params) {
+  var password = String(params.password).trim().toLowerCase();
+  if (verifyAdminCredential(sheet, password)) {
     return { success: true, message: "تم تسجيل الدخول بنجاح كمدير." };
   }
   return { success: false, message: "رمز المرور غير صحيح." };
 }
 
-// 9. Admin Get Trainees
 function adminGetTrainees(sheet, params) {
-  if (String(params.adminPassword).trim() !== "madmody") {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
     return { success: false, message: "غير مصرح بالدخول." };
   }
-  
   var trainees = getSheetData(sheet, "Trainees");
   return { success: true, trainees: trainees };
 }
 
-// 10. Admin Action (Accept/Reject student)
 function adminAction(sheet, params) {
-  if (String(params.adminPassword).trim() !== "madmody") {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
     return { success: false, message: "غير مصرح بالعملية." };
   }
   
   var sh = sheet.getSheetByName("Trainees");
   var trainees = getSheetData(sheet, "Trainees");
   var phone = String(params.phone).trim();
-  var actionState = params.actionState; // "accept" or "reject"
+  var actionState = params.actionState;
   
   for (var i = 0; i < trainees.length; i++) {
     var t = trainees[i];
     if (String(t.Phone).trim() === phone) {
       if (actionState === "accept") {
-        sh.getRange(t.rowNum, 11).setValue("accepted"); // Status
-        sh.getRange(t.rowNum, 12).setValue(params.generatedEmail); // Email
-        sh.getRange(t.rowNum, 13).setValue(params.generatedPassword); // Password
-        sh.getRange(t.rowNum, 14).setValue(""); // RejectReason
-        sh.getRange(t.rowNum, 15).setValue(params.currentLevel || t.CurrentLevel || "Passengers"); // CurrentLevel
+        sh.getRange(t.rowNum, 11).setValue("accepted");
+        sh.getRange(t.rowNum, 12).setValue(params.generatedEmail);
+        sh.getRange(t.rowNum, 13).setValue(params.generatedPassword);
+        sh.getRange(t.rowNum, 14).setValue("");
+        sh.getRange(t.rowNum, 15).setValue(params.currentLevel || t.CurrentLevel || "Passengers");
       } else {
         sh.getRange(t.rowNum, 11).setValue("rejected");
         sh.getRange(t.rowNum, 14).setValue(params.rejectReason);
@@ -474,18 +535,16 @@ function adminAction(sheet, params) {
   return { success: false, message: "لم يتم العثور على المتدرب." };
 }
 
-// 11. Admin Get Videos
 function adminGetVideos(sheet, params) {
-  if (String(params.adminPassword).trim() !== "madmody") {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
     return { success: false, message: "غير مصرح بالدخول." };
   }
   var videos = getSheetData(sheet, "Videos");
   return { success: true, videos: videos };
 }
 
-// 12. Admin Add Video
 function adminAddVideo(sheet, params) {
-  if (String(params.adminPassword).trim() !== "madmody") {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
     return { success: false, message: "غير مصرح بالعملية." };
   }
   
@@ -499,14 +558,7 @@ function adminAddVideo(sheet, params) {
     return { success: false, message: "رابط يوتيوب غير صالح!" };
   }
   
-  sh.appendRow([
-    new Date(),
-    videoId,
-    title,
-    url,
-    level
-  ]);
-  
+  sh.appendRow([new Date(), videoId, title, url, level]);
   return { success: true, message: "تم إضافة الفيديو للمستوى بنجاح." };
 }
 
@@ -516,9 +568,8 @@ function extractYouTubeId(url) {
   return (match && match[2].length === 11) ? match[2] : null;
 }
 
-// 13. Admin Delete Video
 function adminDeleteVideo(sheet, params) {
-  if (String(params.adminPassword).trim() !== "madmody") {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
     return { success: false, message: "غير مصرح بالعملية." };
   }
   
@@ -535,25 +586,22 @@ function adminDeleteVideo(sheet, params) {
   return { success: false, message: "لم يتم العثور على الفيديو." };
 }
 
-// 14. Admin Get Notifications
 function adminGetNotifications(sheet, params) {
-  if (String(params.adminPassword).trim() !== "madmody") {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
     return { success: false, message: "غير مصرح بالدخول." };
   }
   var notifications = getSheetData(sheet, "Notifications");
   return { success: true, notifications: notifications };
 }
 
-// 15. Admin Get Promotion & Certificate Requests
 function adminGetPromotions(sheet, params) {
-  if (String(params.adminPassword).trim() !== "madmody") {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
     return { success: false, message: "غير مصرح بالدخول." };
   }
   
   var promotions = getSheetData(sheet, "Promotions");
   var trainees = getSheetData(sheet, "Trainees");
   
-  // Attach student name to the promotion objects for rendering convenience
   var enhancedPromotions = [];
   for (var i = 0; i < promotions.length; i++) {
     var p = promotions[i];
@@ -571,9 +619,8 @@ function adminGetPromotions(sheet, params) {
   return { success: true, promotions: enhancedPromotions };
 }
 
-// 16. Admin Approve Level Promotion & Issue Certificate
 function adminApprovePromotion(sheet, params) {
-  if (String(params.adminPassword).trim() !== "madmody") {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
     return { success: false, message: "غير مصرح بالعملية." };
   }
   
@@ -587,12 +634,11 @@ function adminApprovePromotion(sheet, params) {
   var trainees = getSheetData(sheet, "Trainees");
   var promotions = getSheetData(sheet, "Promotions");
   
-  // 1. Update Trainee CurrentLevel
   var traineeUpdated = false;
   for (var i = 0; i < trainees.length; i++) {
     var t = trainees[i];
     if (String(t.Email).trim().toLowerCase() === email) {
-      traineesSh.getRange(t.rowNum, 15).setValue(toLevel); // Column 15: CurrentLevel
+      traineesSh.getRange(t.rowNum, 15).setValue(toLevel);
       traineeUpdated = true;
       break;
     }
@@ -602,14 +648,114 @@ function adminApprovePromotion(sheet, params) {
     return { success: false, message: "لم يتم العثور على المتدرب لتعديل مستواه." };
   }
   
-  // 2. Update Promotion Status to approved
   for (var j = 0; j < promotions.length; j++) {
     var p = promotions[j];
     if (String(p.Email).trim().toLowerCase() === email && String(p.FromLevel).trim() === fromLevel && String(p.ToLevel).trim() === toLevel) {
-      promotionsSh.getRange(p.rowNum, 5).setValue("approved"); // Column 5: Status
+      promotionsSh.getRange(p.rowNum, 5).setValue("approved");
       return { success: true, message: "تمت الموافقة على الترقية وإصدار الشهادة بنجاح." };
     }
   }
   
-  return { success: true, message: "تم ترقية مستوى المتدرب بنجاح (لم يتم العثور على سجل الترقية المعلق ولكن تم الترقية يدوياً)." };
+  return { success: true, message: "تم ترقية مستوى المتدرب بنجاح." };
+}
+
+function adminGetAdmins(sheet, params) {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
+    return { success: false, message: "غير مصرح بالدخول." };
+  }
+  var admins = getSheetData(sheet, "Admins");
+  return { success: true, admins: admins };
+}
+
+function adminAddAdmin(sheet, params) {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
+    return { success: false, message: "غير مصرح بالعملية." };
+  }
+  var sh = sheet.getSheetByName("Admins");
+  sh.appendRow([new Date(), params.username.trim(), params.password.trim(), params.role || "Admin"]);
+  return { success: true, message: "تم إضافة المدير الجديد بنجاح." };
+}
+
+function adminGetQuestions(sheet, params) {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
+    return { success: false, message: "غير مصرح بالدخول." };
+  }
+  var questions = getSheetData(sheet, "Questions");
+  return { success: true, questions: questions };
+}
+
+function adminAddQuestion(sheet, params) {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
+    return { success: false, message: "غير مصرح بالعملية." };
+  }
+  var sh = sheet.getSheetByName("Questions");
+  sh.appendRow([
+    new Date(),
+    params.level,
+    params.questionAr,
+    params.questionEn,
+    params.option1Ar,
+    params.option1En,
+    params.option2Ar,
+    params.option2En,
+    params.option3Ar,
+    params.option3En,
+    params.correctIndex
+  ]);
+  return { success: true, message: "تم إضافة السؤال بنجاح للمستوى." };
+}
+
+function adminDeleteQuestion(sheet, params) {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
+    return { success: false, message: "غير مصرح بالعملية." };
+  }
+  var sh = sheet.getSheetByName("Questions");
+  var questions = getSheetData(sheet, "Questions");
+  var rowNum = parseInt(params.rowNum);
+  
+  if (rowNum > 1 && rowNum <= (questions.length + 1)) {
+    sh.deleteRow(rowNum);
+    return { success: true, message: "تم حذف السؤال بنجاح." };
+  }
+  return { success: false, message: "رقم السطر غير صحيح." };
+}
+
+function adminEditTrainee(sheet, params) {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
+    return { success: false, message: "غير مصرح بالعملية." };
+  }
+  var sh = sheet.getSheetByName("Trainees");
+  var trainees = getSheetData(sheet, "Trainees");
+  var phone = String(params.phone).trim();
+  
+  for (var i = 0; i < trainees.length; i++) {
+    var t = trainees[i];
+    if (String(t.Phone).trim() === phone) {
+      sh.getRange(t.rowNum, 2).setValue(params.name); // Name
+      sh.getRange(t.rowNum, 12).setValue(params.email); // Email
+      sh.getRange(t.rowNum, 15).setValue(params.level); // CurrentLevel
+      sh.getRange(t.rowNum, 10).setValue(params.branch); // TrainingBranch
+      return { success: true, message: "تم تعديل بيانات المتدرب بنجاح." };
+    }
+  }
+  return { success: false, message: "لم يتم العثور على المتدرب." };
+}
+
+function adminToggleBlockTrainee(sheet, params) {
+  if (!verifyAdminCredential(sheet, params.adminPassword)) {
+    return { success: false, message: "غير مصرح بالعملية." };
+  }
+  var sh = sheet.getSheetByName("Trainees");
+  var trainees = getSheetData(sheet, "Trainees");
+  var phone = String(params.phone).trim();
+  var state = params.state; // "blocked" or "accepted"
+  
+  for (var i = 0; i < trainees.length; i++) {
+    var t = trainees[i];
+    if (String(t.Phone).trim() === phone) {
+      sh.getRange(t.rowNum, 11).setValue(state); // Status
+      return { success: true, message: state === "blocked" ? "تم حظر الحساب بنجاح." : "تم تنشيط الحساب بنجاح." };
+    }
+  }
+  return { success: false, message: "لم يتم العثور على المتدرب." };
 }

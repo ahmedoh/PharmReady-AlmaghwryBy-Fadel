@@ -51,15 +51,6 @@
       <circle cx="12" cy="12" r="10"></circle>
       <line x1="5" y1="5" x2="19" y2="19"></line>
     </svg>
-    <!-- Molecule 2 -->
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8" style="position: absolute; left: 3%; top: 82%; width: 100px; height: 100px; opacity: 0.03; color: var(--color-primary); transform: rotate(45deg);">
-      <circle cx="12" cy="5" r="2.5"></circle>
-      <circle cx="5" cy="12" r="2.5"></circle>
-      <circle cx="19" cy="12" r="2.5"></circle>
-      <circle cx="12" cy="19" r="2.5"></circle>
-      <line x1="12" y1="7.5" x2="12" y2="16.5"></line>
-      <line x1="7.5" y1="12" x2="16.5" y2="12"></line>
-    </svg>
   </div>
 
   <!-- Premium Header Navbar (Cloned from ta3llm-edu.com) -->
@@ -68,8 +59,8 @@
       
       <!-- Right Side: Logo & Brand -->
       <div class="logo-section">
-        <img src="logo.png" alt="شعار صيدليات آل مغاوري" class="logo-img" id="app-logo" onerror="this.onerror=null; this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
-        <div class="logo-placeholder" id="logo-fallback" style="display: none;">M</div>
+        <img src="logo.png" alt="شعار صيدليات آل مغاوري" class="logo-img" style="height: 48px; max-height: 48px; width: auto; max-width: 160px; object-fit: contain;" id="app-logo" onerror="this.onerror=null; this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
+        <div class="logo-placeholder" id="logo-fallback" style="display: none; width: 48px; height: 48px; border-radius: 50%; background: var(--color-primary); color: #fff; align-items: center; justify-content: center; font-size: 20px; font-weight: bold;">M</div>
         <div>
           <h1 data-i18n="logo_title" style="margin: 0; font-size: 18px; font-weight: 900;">صيدليات آل مغاوري</h1>
           <p data-i18n="logo_sub" style="font-size: 10px; margin: 0;">منصة تأهيل المتدربين الجدد لسوق العمل</p>
@@ -101,21 +92,18 @@
     <div class="ta3llm-hero-wrapper">
       <div class="hero-bg-doodles"></div>
       
-      <!-- Left Background: Sparkly Book doodle from screenshot -->
+      <!-- Left Background: Sparkly Book doodle -->
       <svg class="doodle-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 3%; top: 10%; width: 150px; height: 150px; opacity: 0.08; color: var(--color-gold); transform: rotate(-12deg); pointer-events: none; z-index: 1;">
         <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
         <path d="M6 6h10"></path>
         <path d="M6 10h10"></path>
         <path d="M6 14h10"></path>
-        <circle cx="2" cy="2" r="0.5" fill="currentColor"></circle>
-        <circle cx="22" cy="18" r="0.5" fill="currentColor"></circle>
       </svg>
       
-      <!-- Right Background: Pencil doodle from screenshot -->
+      <!-- Right Background: Pencil doodle -->
       <svg class="doodle-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 4%; bottom: 15%; width: 140px; height: 140px; opacity: 0.08; color: var(--color-primary); transform: rotate(18deg); pointer-events: none; z-index: 1;">
         <path d="M12 20h9"></path>
         <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
-        <path d="m15 5 3 3"></path>
       </svg>
       
       <div class="hero-main-grid">
@@ -132,7 +120,7 @@
           <h2 data-i18n="hero_title">مرحباً بكم في منصة <span>PharmReady</span> 🚀</h2>
           <p data-i18n="hero_desc">اكتشف عالماً من المعرفة والمهارات العملية مع صيدليات آل مغاوري. انضم إلينا الآن وابدأ رحلتك التدريبية الممتعة والمفيدة لتأهيلك لسوق العمل الصيدلاني.</p>
           
-          <!-- Student avatar bubbles counter -->
+          <!-- Student counter -->
           <div class="trainee-counter-row">
             <div class="avatar-bubbles">
               <span class="avatar-bubble" style="z-index: 4; background-color: var(--color-primary); color: #fff;">A</span>
@@ -143,19 +131,20 @@
             <div class="counter-number" data-i18n="hero_users">+150 متدرب نشط</div>
           </div>
 
-          <!-- Buttons -->
-          <div class="hero-actions-container">
+          <!-- Buttons: Register, Login, Discover More -->
+          <div class="hero-actions-container" style="display: flex; gap: 10px; flex-wrap: wrap;">
             <a href="register.html" class="btn btn-primary" style="padding: 12px 25px;"><i class="fa-solid fa-user-plus"></i> <span data-i18n="btn_register_now">سجل الآن (طالب جديد)</span></a>
-            <a href="#levels-catalog" class="btn btn-olive" style="padding: 12px 25px;"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="btn_discover_more">إكتشف أكثر</span></a>
+            <button class="btn btn-olive" onclick="document.getElementById('login-modal').classList.add('active');" style="padding: 12px 25px; cursor: pointer;"><i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="btn_login_nav">تسجيل دخول</span></button>
+            <a href="#levels-catalog" class="btn btn-secondary" style="padding: 12px 25px; border: 1px solid var(--border-color); color: var(--text-main); background: var(--bg-secondary);"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="btn_discover_more">إكتشف أكثر</span></a>
           </div>
         </div>
 
       </div>
 
-      <!-- Overlapping Bottom Banner Card (Cloned exactly from ta3llm-edu.com) -->
+      <!-- Overlapping Bottom Banner Card -->
       <div class="overlapping-features-card">
         
-        <!-- Col 1: Search Syllabus -->
+        <!-- Col 1 -->
         <div class="feature-col">
           <div class="feature-col-icon" style="background: none; width: 48px; height: 48px;">
             <img src="feat_search.gif" alt="Search Syllabus" style="width: 100%; height: 100%; object-fit: contain;">
@@ -166,7 +155,7 @@
           </div>
         </div>
 
-        <!-- Col 2: Learn with Trainer -->
+        <!-- Col 2 -->
         <div class="feature-col">
           <div class="feature-col-icon" style="background: none; width: 48px; height: 48px;">
             <img src="feat_teacher.gif" alt="Learn with Trainer" style="width: 100%; height: 100%; object-fit: contain;">
@@ -177,7 +166,7 @@
           </div>
         </div>
 
-        <!-- Col 3: Complete Exams & Print Cert -->
+        <!-- Col 3 -->
         <div class="feature-col">
           <div class="feature-col-icon" style="background: none; width: 48px; height: 48px;">
             <img src="feat_lessons.gif" alt="Complete Exams" style="width: 100%; height: 100%; object-fit: contain;">
@@ -192,7 +181,7 @@
 
     </div>
 
-    <!-- 1. Category Section (أكتشف المناهج) -->
+    <!-- 1. Category Section -->
     <section class="category-section" id="levels-catalog" style="scroll-margin-top: 80px;">
       <div style="text-align: center; margin-bottom: 30px;">
         <h2 data-i18n="cat_title" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin: 0 0 10px;">أكتشف المناهج التدريبية</h2>
@@ -219,7 +208,7 @@
           </div>
         </a>
 
-        <a href="#popular-courses-sec" class="category-card" onclick="filterCategory('level-1');">
+        <a href="#popular-courses-sec" class="category-card" onclick="filterCategory('level-2');">
           <div class="icon-wrap">
             <img src="https://images.unsplash.com/photo-1576602976047-174e57a47881?w=80&auto=format&fit=crop&q=60" alt="Pharma">
           </div>
@@ -228,7 +217,7 @@
           </div>
         </a>
 
-        <a href="#popular-courses-sec" class="category-card" onclick="filterCategory('level-2');">
+        <a href="#popular-courses-sec" class="category-card" onclick="filterCategory('level-3');">
           <div class="icon-wrap">
             <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=80&auto=format&fit=crop&q=60" alt="Cosmo">
           </div>
@@ -237,19 +226,19 @@
           </div>
         </a>
 
-        <a href="#popular-courses-sec" class="category-card" onclick="filterCategory('level-3');">
+        <a href="#popular-courses-sec" class="category-card" onclick="filterCategory('level-4');">
           <div class="icon-wrap">
             <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=80&auto=format&fit=crop&q=60" alt="Diabetes">
           </div>
           <div class="content-wrap">
-            <h6 class="title" data-i18n="cat_diab">دبلومات السكر والأمراض</h6>
+            <h6 class="title" data-i18n="cat_diab">ليفل الوحش والتركيبات المتقدمة</h6>
           </div>
         </a>
 
       </div>
     </section>
 
-    <!-- 2. How it Works Section (كيف تعمل منصة PharmReady؟) -->
+    <!-- 2. How it Works Section -->
     <section class="how-work">
       <div class="how-work-grid">
         
@@ -313,7 +302,7 @@
       </div>
     </section>
 
-    <!-- 3. Why Section / Academy Key Features (لماذا الأكاديمية؟) -->
+    <!-- 3. Why Section -->
     <section class="key-section">
       <div style="text-align: center; margin-bottom: 20px;">
         <h2 data-i18n="key_title" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin: 0 0 10px;">لماذا منصة PharmReady؟</h2>
@@ -353,11 +342,11 @@
       </div>
     </section>
 
-    <!-- 4. Most Popular Courses Section (الكورسات الأكثر رواجاً) -->
+    <!-- 4. Most Popular Courses Section (5 Levels Grid) -->
     <section class="premium" id="popular-courses-sec" style="scroll-margin-top: 80px;">
       <div style="text-align: center;">
-        <h2 data-i18n="courses_title" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin: 0 0 10px;">الكورسات والبرامج الأكثر رواجاً</h2>
-        <p data-i18n="courses_desc" style="font-size: 13px; color: var(--text-muted); max-width: 600px; margin: 0 auto;">تصفح البرامج التدريبية المعتمدة للمستويات الأربعة المتسلسلة بالأكاديمية.</p>
+        <h2 data-i18n="courses_title" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin: 0 0 10px;">الكورسات والبرامج التدريبية</h2>
+        <p data-i18n="courses_desc" style="font-size: 13px; color: var(--text-muted); max-width: 600px; margin: 0 auto;">تصفح البرامج التدريبية المعتمدة للمستويات الخمسة المتسلسلة بالأكاديمية.</p>
       </div>
 
       <!-- Filter Tabs -->
@@ -366,7 +355,8 @@
         <li><button class="btn" data-filter="level-0" data-i18n="tab_0">Passengers (تمهيدي)</button></li>
         <li><button class="btn" data-filter="level-1" data-i18n="tab_1">Starters (المستوى 1)</button></li>
         <li><button class="btn" data-filter="level-2" data-i18n="tab_2">Movers (المستوى 2)</button></li>
-        <li><button class="btn" data-filter="level-3" data-i18n="tab_3">Flyers (ليفل الوحش)</button></li>
+        <li><button class="btn" data-filter="level-3" data-i18n="tab_3">Flyers (المستوى 3)</button></li>
+        <li><button class="btn" data-filter="level-4" data-i18n="tab_4">ليفل الوحش 👑 (المستوى 4)</button></li>
       </ul>
 
       <!-- Courses Cards Grid -->
@@ -384,7 +374,7 @@
               <h6 class="title" data-i18n="c1_title">أساسيات ممارسة الصيدلة وترتيب الأقسام</h6>
             </a>
             <ul class="product-status">
-              <li><i class="fa-solid fa-clock"></i> <span data-i18n="c_duration">3 محاضرات</span></li>
+              <li><i class="fa-solid fa-clock"></i> <span data-i18n="c_duration">محاضرات تفاعلية</span></li>
             </ul>
           </div>
           <div class="carn-btm">
@@ -411,7 +401,7 @@
               <h6 class="title" data-i18n="c2_title">دراسة التشخيص الذاتي OTC والإسعافات الأولية</h6>
             </a>
             <ul class="product-status">
-              <li><i class="fa-solid fa-clock"></i> <span data-i18n="c_duration_2">3 محاضرات</span></li>
+              <li><i class="fa-solid fa-clock"></i> <span data-i18n="c_duration_2">محاضرات تفاعلية</span></li>
             </ul>
           </div>
           <div class="carn-btm">
@@ -435,10 +425,10 @@
           <div class="content-wrap">
             <p class="category">Movers - Level 2</p>
             <a href="javascript:void(0);" onclick="document.getElementById('btn-show-login').click();">
-              <h6 class="title" data-i18n="c3_title">بدائل المضادات الحيوية والجلدية والتجميل</h6>
+              <h6 class="title" data-i18n="c3_title">بدائل المضادات الحيوية وقراءة التحاليل الطبية</h6>
             </a>
             <ul class="product-status">
-              <li><i class="fa-solid fa-clock"></i> <span data-i18n="c_duration_3">2 محاضرات</span></li>
+              <li><i class="fa-solid fa-clock"></i> <span data-i18n="c_duration_3">محاضرات تفاعلية</span></li>
             </ul>
           </div>
           <div class="carn-btm">
@@ -457,15 +447,15 @@
         <div class="base-card filter-item level-3">
           <span class="dis-tag">-100%</span>
           <div class="thumb-wrap">
-            <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400&auto=format&fit=crop&q=80" alt="Course formulation">
+            <img src="https://images.unsplash.com/photo-1576602976047-174e57a47881?w=400&auto=format&fit=crop&q=80" alt="Course formulation">
           </div>
           <div class="content-wrap">
             <p class="category">Flyers - Level 3</p>
             <a href="javascript:void(0);" onclick="document.getElementById('btn-show-login').click();">
-              <h6 class="title" data-i18n="c4_title">صناعة التركيبات التجميلية ودبلومة السكر</h6>
+              <h6 class="title" data-i18n="c4_title">تركيبات العناية بالبشرة ومستحضرات التجميل</h6>
             </a>
             <ul class="product-status">
-              <li><i class="fa-solid fa-clock"></i> <span data-i18n="c_duration_4">2 محاضرات</span></li>
+              <li><i class="fa-solid fa-clock"></i> <span data-i18n="c_duration_4">محاضرات تفاعلية</span></li>
             </ul>
           </div>
           <div class="carn-btm">
@@ -480,10 +470,37 @@
           </div>
         </div>
 
+        <!-- Card 5: Beast -->
+        <div class="base-card filter-item level-4">
+          <span class="dis-tag">-100%</span>
+          <div class="thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400&auto=format&fit=crop&q=80" alt="Course Beast Level">
+          </div>
+          <div class="content-wrap">
+            <p class="category">Beast Level - Level 4 👑</p>
+            <a href="javascript:void(0);" onclick="document.getElementById('btn-show-login').click();">
+              <h6 class="title" style="color: var(--color-gold);">إدارة النواقص والطلبيات ودبلومة السكر المكثفة</h6>
+            </a>
+            <ul class="product-status">
+              <li><i class="fa-solid fa-circle-radiation"></i> <span style="font-weight: bold; color: var(--color-gold);">المستوى الأصعب (ليفل الوحش)</span></li>
+            </ul>
+          </div>
+          <div class="carn-btm">
+            <ul class="rating-wrap">
+              <li><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></li>
+              <li><p>5.0 (124)</p></li>
+            </ul>
+            <div class="price-wrap">
+              <h6 class="price" data-i18n="free_tag" style="color: var(--color-gold);">مغلق ومحمي</h6>
+              <p class="dis-price">EGP 1500</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- 5. FAQs Accordion Section (الأسئلة الشائعة) -->
+    <!-- 5. FAQs Accordion Section -->
     <section class="faq-section">
       <div style="text-align: center; margin-bottom: 30px;">
         <h2 data-i18n="faq_title" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin: 0 0 10px;">الأسئلة الشائعة</h2>
@@ -500,60 +517,40 @@
               <i class="fa-solid fa-chevron-down"></i>
             </div>
             <div class="accordion-body">
-              <p data-i18n="a1">يمكنك تعبئة طلب انضمام جديد عبر صفحة التسجيل وكتابة بياناتك والفرع المراد التعيين والتدريب فيه، وسيقوم المشرف بفحص بياناتك وتوليد بريد إلكتروني وكلمة مرور مؤقتة لك فور القبول.</p>
+              <p data-i18n="a1">يجب التقديم أولاً من رابط "سجل الآن كمتدرب جديد" وملء استمارة الترشيح. سيقوم مديرو صيدليات آل مغاوري بمراجعة طلبك وإرسال البريد الإلكتروني والرمز السري الخاص بك عند قبولك.</p>
             </div>
           </div>
           <!-- Q2 -->
           <div class="accordion-item">
             <div class="accordion-header">
-              <span data-i18n="q2">ما هي شروط الانتقال من مستوى تدريبي إلى آخر؟</span>
+              <span data-i18n="q2">ما هي فروع صيدليات آل مغاوري؟</span>
               <i class="fa-solid fa-chevron-down"></i>
             </div>
             <div class="accordion-body">
-              <p data-i18n="a2">يجب عليك أولاً إتمام مشاهدة جميع المحاضرات المحددة للمستوى الحالي، ثم اجتياز اختبار المرحلة التقييمي (خمسة أسئلة خيارات متعددة) بنسبة نجاح 80% أو أكثر، ثم انتظار موافقة المسؤول.</p>
-            </div>
-          </div>
-          <!-- Q3 -->
-          <div class="accordion-item">
-            <div class="accordion-header">
-              <span data-i18n="q3">هل الشهادة الصادرة معتمدة وموثقة من الصيدليات؟</span>
-              <i class="fa-solid fa-chevron-down"></i>
-            </div>
-            <div class="accordion-body">
-              <p data-i18n="a3">نعم، بعد موافقة المدير على ترقيتك، يتم إصدار شهادة تخرج رقمية فخمة وموثقة برمز تحقق رقمي فريد باسمك ومستواك وتوقيع المشرف د. أحمد فاضل، وهي قابلة للطباعة الورقية الفورية.</p>
+              <p data-i18n="a2">لدينا فروع متميزة تغطي مدينة دمياط الجديدة بالكامل وهي: فرع ابو الخير، فرع البنك، فرع السبعين، فرع الصعيدي القديم، فرع الازهر، بالإضافة إلى قسم الكول سنتر الموحد.</p>
             </div>
           </div>
         </div>
 
         <div>
+          <!-- Q3 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <span data-i18n="q3">كيف أنتقل من مستوى إلى آخر؟</span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="accordion-body">
+              <p data-i18n="a3">بمجرد مشاهدتك لجميع الفيديوهات المطلوبة لمستواك الحالي، سيفتح لك اختبار التقييم التلقائي. بعد اجتياز الامتحان بنجاح، سيتم إرسال طلب الترقية للمشرف لاعتماده وترقيتك فوراً للمستوى التالي.</p>
+            </div>
+          </div>
           <!-- Q4 -->
           <div class="accordion-item">
             <div class="accordion-header">
-              <span data-i18n="q4">هل يمكنني حضور المحاضرات عبر الموبايل؟</span>
+              <span data-i18n="q4">هل الشهادات الصادرة مجانية ومعتمدة؟</span>
               <i class="fa-solid fa-chevron-down"></i>
             </div>
             <div class="accordion-body">
-              <p data-i18n="a4">نعم بالتأكيد. المنصة مصممة بأعلى تقنيات التصميم المتجاوب لتناسب شاشات الهواتف المحمولة والأجهزة اللوحية وتعمل بأقل استهلاك ممكن لسرعة الإنترنت وبيانات الهاتف.</p>
-            </div>
-          </div>
-          <!-- Q5 -->
-          <div class="accordion-item">
-            <div class="accordion-header">
-              <span data-i18n="q5">ما هي الفروع التدريبية المتاحة داخل دمياط؟</span>
-              <i class="fa-solid fa-chevron-down"></i>
-            </div>
-            <div class="accordion-body">
-              <p data-i18n="a5">تغطي فروعنا التدريبية: فرع دمياط الجديدة (الرئيسي)، فرع مدينة دمياط، فرع أبو الخير، فرع الكورنيش، وفرع الأعصر، ويتم توزيع الطلاب طبقاً للفرع المحدد بطلب الانضمام.</p>
-            </div>
-          </div>
-          <!-- Q6 -->
-          <div class="accordion-item">
-            <div class="accordion-header">
-              <span data-i18n="q6">ماذا يحدث في حال رسوبي في اختبار المرحلة؟</span>
-              <i class="fa-solid fa-chevron-down"></i>
-            </div>
-            <div class="accordion-body">
-              <p data-i18n="a6">لا تقلق، يمكنك إعادة مراجعة المحاضرات وإعادة تقديم اختبار المستوى عدة مرات حتى تجتازه بنسبة 80% للحصول على الترقية؛ فالهدف هو التأهيل الميداني الحقيقي.</p>
+              <p data-i18n="a4">نعم، جميع الشهادات الصادرة لكل مرحلة مجانية تماماً للمتدربين المقبولين داخل صيدليات آل مغاوري، وتحمل توقيع د. أحمد فاضل وتكون معتمدة وصالحة للطباعة الفورية.</p>
             </div>
           </div>
         </div>
@@ -561,50 +558,53 @@
       </div>
     </section>
 
-    <!-- 6. Testimonials Section (آراء المتدربين) -->
+    <!-- 6. Testimonials Section -->
     <section class="testimonial-section">
-      <div style="text-align: center; margin-bottom: 20px;">
-        <h2 data-i18n="test_title" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin: 0 0 10px;">ماذا يقول متدربو صيدليات آل مغاوري؟</h2>
-        <p data-i18n="test_desc" style="font-size: 13px; color: var(--text-muted); max-width: 600px; margin: 0 auto;">قصص نجاح وتجارب زملائك الصيادلة الذين تخرجوا من الأكاديمية وتأهلوا لسوق العمل الفعلي.</p>
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h2 data-i18n="test_title" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin: 0 0 10px;">آراء المتدربين الخريجين</h2>
+        <p data-i18n="test_desc" style="font-size: 13px; color: var(--text-muted); max-width: 600px; margin: 0 auto;">تجارب وقصص نجاح حقيقية لطلاب الصيدلة الذين أتموا تدريبهم بنجاح داخل الأكاديمية.</p>
       </div>
 
-      <div class="testimonials-grid">
+      <div class="testimonial-grid">
         
+        <!-- Card 1 -->
         <div class="testimonial-card">
-          <p class="quote-text" data-i18n="t1_text">"كانت دراسة الـ OTC والتركيبات التجميلية في الأكاديمية نقلة حقيقية بالنسبة لي. المحتوى من د. أحمد فاضل كان عملياً للغاية ومطابقاً لما أواجهه في الصيدلية اليوم."</p>
+          <p class="quote-text" data-i18n="t1_text">"كان التدريب في صيدليات آل مغاوري نقطة تحول هامة في مساري المهني. تنظيم المنهج والمستويات وسهولة متابعة المحاضرات جعلني أمتلك ثقة تامة أثناء التعامل مع الحالات والـ OTC."</p>
           <div class="client-info">
             <div class="client-thumb">
-              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80" alt="Trainee A">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Trainee A">
             </div>
             <div class="client-details">
-              <h5 data-i18n="t1_name">د. إسراء محمود</h5>
-              <p data-i18n="t1_job">خريجة مستوى Starters | فرع دمياط الجديدة</p>
+              <h5 data-i18n="t1_name">د. آلاء محمود</h5>
+              <p data-i18n="t1_job">خريجة مستوى Movers | فرع البنك</p>
             </div>
           </div>
         </div>
 
+        <!-- Card 2 -->
         <div class="testimonial-card">
-          <p class="quote-text" data-i18n="t2_text">"نظام الامتحانات رائع والشهادة فخمة جداً، والأجمل هو تأمين المحتوى بالعلامة المائية المخصصة. أشعر بالفخر لانتمائي لأكاديمية صيدليات آل مغاوري."</p>
+          <p class="quote-text" data-i18n="t2_text">"المنصة رائعة وتفاعلية جداً، والاختبارات تقيس مدى استيعابنا بدقة. بفضل إرشادات د. أحمد فاضل تمكنت من الارتقاء إلى المستوى الثالث في وقت قياسي."</p>
           <div class="client-info">
             <div class="client-thumb">
-              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Trainee B">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Trainee B">
             </div>
             <div class="client-details">
-              <h5 data-i18n="t2_name">د. أحمد عبد الرحمن</h5>
-              <p data-i18n="t2_job">خريج مستوى Movers | فرع مدينة دمياط</p>
+              <h5 data-i18n="t2_name">د. محمد الشناوي</h5>
+              <p data-i18n="t2_job">خريج مستوى Starters | فرع السبعين</p>
             </div>
           </div>
         </div>
 
+        <!-- Card 3 -->
         <div class="testimonial-card">
-          <p class="quote-text" data-i18n="t3_text">"ليفل الوحش (Flyers) كان تحدياً كبيراً، ولكن دبلومة السكر وشرح التركيبات التجميلية جعلتني متمكناً للغاية في إعداد التركيبات للمرضى بدقة شديدة."</p>
+          <p class="quote-text" data-i18n="t3_text">"ليفل الوحش كان تحدياً كبيراً، ولكن دبلومة السكر وشرح التركيبات التجميلية جعلتني متمكناً للغاية في إعداد التركيبات للمرضى بدقة شديدة."</p>
           <div class="client-info">
             <div class="client-thumb">
               <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80" alt="Trainee C">
             </div>
             <div class="client-details">
               <h5 data-i18n="t3_name">د. سارة إبراهيم</h5>
-              <p data-i18n="t3_job">خريجة مستوى Flyers | فرع أبو الخير</p>
+              <p data-i18n="t3_job">خريجة ليفل الوحش | فرع أبو الخير</p>
             </div>
           </div>
         </div>
@@ -614,21 +614,21 @@
 
   </main>
 
-  <!-- 7. Cloned Footer (المذيل الشامل) -->
+  <!-- 7. Cloned Footer -->
   <footer class="footer-area">
     <div class="app-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
       
       <div class="footer-grid">
         
-        <!-- Col 1: Bio -->
+        <!-- Col 1 -->
         <div class="footer-item">
           <div class="logo-normal">
-            <img src="logo.png" alt="شعار صيدليات آل مغاوري" style="height: 45px; width: auto; filter: brightness(0) invert(1);" onerror="this.onerror=null; this.style.display='none';">
+            <img src="logo.png" alt="شعار صيدليات آل مغاوري" style="height: 45px; max-height: 45px; width: auto; max-width: 150px; object-fit: contain; filter: brightness(0) invert(1);" onerror="this.onerror=null; this.style.display='none';">
           </div>
           <p data-i18n="foot_bio">منصة PharmReady هي منصة تعليمية وتدريبية مبتكرة تقدم دبلومات ومحاضرات تدريبية مخصصة لصيادلة صيدليات آل مغاوري لتهيئة مهاراتهم الميدانية لتقديم أفضل جودة رعاية صحية.</p>
         </div>
 
-        <!-- Col 2: Navigation Links -->
+        <!-- Col 2 -->
         <div class="footer-item">
           <h5 class="footer-item__title" data-i18n="foot_links_title">روابط تهمك</h5>
           <ul class="footer-menu">
@@ -639,7 +639,7 @@
           </ul>
         </div>
 
-        <!-- Col 3: Contact Info -->
+        <!-- Col 3 -->
         <div class="footer-item">
           <h5 class="footer-item__title" data-i18n="foot_contact_title">تواصل معنا</h5>
           <div class="footer-contact-info">
@@ -652,11 +652,11 @@
           </div>
           <div class="footer-contact-info">
             <i class="fa-solid fa-location-dot"></i>
-            <p data-i18n="foot_addr">فرع دمياط الجديدة (الرئيسي)</p>
+            <p data-i18n="foot_addr">دمياط الجديدة - فروع صيدليات آل مغاوري</p>
           </div>
         </div>
 
-        <!-- Col 4: Newsletter -->
+        <!-- Col 4 -->
         <div class="footer-item">
           <h5 class="footer-item__title" data-i18n="foot_news_title">النشرة الدورية</h5>
           <p data-i18n="foot_news_desc">اشترك لتصلك أحدث المقررات والتحديثات التدريبية فور صدورها.</p>
@@ -677,21 +677,25 @@
     </div>
   </footer>
 
-  <!-- 8. Video Modal Popup (نافذة عرض الفيديو التعريفية) -->
-  <div class="video-modal-overlay" id="video-modal">
-    <div class="video-modal-content">
-      <button class="video-modal-close" id="btn-close-video"><i class="fa-solid fa-xmark"></i></button>
-      <iframe id="walkthrough-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  <!-- 8. Video Modal Popup with Transparent Overlay Protector (طبقة الحماية لمنع النقر والانتقال لليوتيوب) -->
+  <div class="video-modal-overlay" id="video-modal" style="display: none; align-items: center; justify-content: center; z-index: 10000; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85);">
+    <div class="video-modal-content" style="position: relative; width: 90%; max-width: 800px; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; border: 2px solid var(--color-primary-glow);">
+      <button class="video-modal-close" id="btn-close-video" style="position: absolute; top: 15px; right: 15px; z-index: 200; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.6); color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px;"><i class="fa-solid fa-xmark"></i></button>
+      
+      <!-- Protected Overlay Layer -->
+      <div class="video-overlay-protection" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 99; background: transparent; cursor: default;"></div>
+      
+      <iframe id="walkthrough-iframe" src="" allow="autoplay; encrypted-media" style="width: 100%; height: 100%; border: none;"></iframe>
     </div>
   </div>
 
-  <!-- Trainee Login Modal (Blurred Overlay Glassmorphic Layout) -->
+  <!-- Trainee Login Modal -->
   <div class="modal-overlay" id="login-modal">
     <div class="modal-content" style="max-width: 460px;">
       
       <div class="modal-header">
         <h3 style="font-size: 18px;"><i class="fa-solid fa-user-lock" style="color: var(--color-primary);"></i> <span data-i18n="login_title">بوابة دخول المتدربين</span></h3>
-        <button class="btn btn-secondary" style="padding: 5px 10px;" id="btn-close-login"><i class="fa-solid fa-xmark"></i></button>
+        <button class="btn btn-secondary" style="padding: 5px 10px; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;" id="btn-close-login"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="modal-body">
@@ -714,7 +718,7 @@
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; cursor: pointer;">
             <i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="btn_login">تسجيل الدخول للمنصة</span>
           </button>
         </form>
@@ -729,7 +733,7 @@
     </div>
   </div>
 
-  <!-- Floating Social Contact Widgets (Cloned exactly from ta3llm-edu.com) -->
+  <!-- Floating Social Contact Widgets -->
   <div class="social">
     <a href="https://www.facebook.com/" target="_blank">
       <div class="social-btn color-telegram">
@@ -754,15 +758,13 @@
   <!-- Scripts -->
   <script src="config.js"></script>
   <script>
-    // Translation dictionary for Trainee login page (Now includes all clone sections)
+    // Translation dictionary for Trainee login page
     const langData = {
       ar: {
         logo_title: "صيدليات آل مغاوري",
         logo_sub: "منصة تأهيل المتدربين الجدد لسوق العمل",
         menu_home: "الرئيسية",
         menu_levels: "المناهج والمستويات",
-        menu_about: "من نحن",
-        menu_contact: "الاتصال",
         menu_waiting: "صفحة الانتظار",
         btn_login_nav: "تسجيل دخول",
         hero_title: "مرحباً بكم في منصة <span>PharmReady</span> 🚀",
@@ -782,7 +784,7 @@
         cat_otc: "التدريب الميداني والـ OTC",
         cat_pharma: "أساسيات علم الأدوية",
         cat_cosmo: "العناية بالبشرة والتجميل",
-        cat_diab: "دبلومات السكر والأمراض",
+        cat_diab: "ليفل الوحش والتركيبات المتقدمة",
         how_title: "كيف تعمل منصة PharmReady؟",
         how_desc: "من خلال خطوات بسيطة وسهلة يمكنك تأهيل نفسك لسوق العمل الصيدلاني واجتياز المستويات بنجاح.",
         step_1_title: "التسجيل والتحقق",
@@ -799,181 +801,176 @@
         key_2: "أمان وحماية المحتوى",
         key_3: "المتابعة والتقييم الذكي",
         key_4: "التعليم الصيدلاني المستمر",
-        courses_title: "الكورسات والبرامج الأكثر رواجاً",
-        courses_desc: "تصفح البرامج التدريبية المعتمدة للمستويات الأربعة المتسلسلة بالأكاديمية.",
+        courses_title: "الكورسات والبرامج التدريبية",
+        courses_desc: "تصفح البرامج التدريبية المعتمدة للمستويات الخمسة المتسلسلة بالأكاديمية.",
         tab_all: "الكل",
         tab_0: "Passengers (تمهيدي)",
         tab_1: "Starters (المستوى 1)",
         tab_2: "Movers (المستوى 2)",
-        tab_3: "Flyers (ليفل الوحش)",
+        tab_3: "Flyers (المستوى 3)",
+        tab_4: "ليفل الوحش 👑 (المستوى 4)",
         c1_title: "أساسيات ممارسة الصيدلة وترتيب الأقسام",
+        c_duration: "محاضرات تفاعلية",
         c2_title: "دراسة التشخيص الذاتي OTC والإسعافات الأولية",
-        c3_title: "بدائل المضادات الحيوية والجلدية والتجميل",
-        c4_title: "صناعة التركيبات التجميلية ودبلومة السكر",
-        c_duration: "3 محاضرات",
-        c_duration_2: "3 محاضرات",
-        c_duration_3: "2 محاضرات",
-        c_duration_4: "2 محاضرات",
+        c_duration_2: "محاضرات تفاعلية",
+        c3_title: "بدائل المضادات الحيوية وقراءة التحاليل الطبية",
+        c_duration_3: "محاضرات تفاعلية",
+        c4_title: "تركيبات العناية بالبشرة ومستحضرات التجميل",
+        c_duration_4: "محاضرات تفاعلية",
         free_tag: "مجاني",
         faq_title: "الأسئلة الشائعة",
         faq_desc: "كل ما تود معرفته عن نظام المناهج والامتحانات وطباعة الشهادات بالمنصة.",
         q1: "كيف أحصل على حساب معتمد في المنصة؟",
-        a1: "يمكنك تعبئة طلب انضمام جديد عبر صفحة التسجيل وكتابة بياناتك والفرع المراد التعيين والتدريب فيه، وسيقوم المشرف بفحص بياناتك وتوليد بريد إلكتروني وكلمة مرور مؤقتة لك فور القبول.",
-        q2: "ما هي شروط الانتقال من مستوى تدريبي إلى آخر؟",
-        a2: "يجب عليك أولاً إتمام مشاهدة جميع المحاضرات المحددة للمستوى الحالي، ثم اجتياز اختبار المرحلة التقييمي (خمسة أسئلة خيارات متعددة) بنسبة نجاح 80% أو أكثر، ثم انتظار موافقة المسؤول.",
-        q3: "هل الشهادة الصادرة معتمدة وموثقة من الصيدليات؟",
-        a3: "نعم، بعد موافقة المدير على ترقيتك، يتم إصدار شهادة تخرج رقمية فخمة وموثقة برمز تحقق رقمي فريد باسمك ومستواك وتوقيع المشرف د. أحمد فاضل، وهي قابلة للطباعة الورقية الفورية.",
-        q4: "هل يمكنني حضور المحاضرات عبر الموبايل؟",
-        a4: "نعم بالتأكيد. المنصة مصممة بأعلى تقنيات التصميم المتجاوب لتناسب شاشات الهواتف المحمولة والأجهزة اللوحية وتعمل بأقل استهلاك ممكن لسرعة الإنترنت وبيانات الهاتف.",
-        q5: "ما هي الفروع التدريبية المتاحة داخل دمياط؟",
-        a5: "تغطي فروعنا التدريبية: فرع دمياط الجديدة (الرئيسي)، فرع مدينة دمياط، فرع أبو الخير، فرع الكورنيش، وفرع الأعصر، ويتم توزيع الطلاب طبقاً للفرع المحدد بطلب الانضمام.",
-        q6: "ماذا يحدث في حال رسوبي في اختبار المرحلة؟",
-        a6: "لا تقلق، يمكنك إعادة مراجعة المحاضرات وإعادة تقديم اختبار المستوى عدة مرات حتى تجتازه بنسبة 80% للحصول على الترقية؛ فالهدف هو التأهيل الميداني الحقيقي.",
-        test_title: "ماذا يقول متدربو صيدليات آل مغاوري؟",
-        test_desc: "قصص نجاح وتجارب زملائك الصيادلة الذين تخرجوا من الأكاديمية وتأهلوا لسوق العمل الفعلي.",
-        t1_text: "\"كانت دراسة الـ OTC والتركيبات التجميلية في الأكاديمية نقلة حقيقية بالنسبة لي. المحتوى من د. أحمد فاضل كان عملياً للغاية ومطابقاً لما أواجه في الصيدلية اليوم.\"",
-        t1_name: "د. إسراء محمود",
-        t1_job: "خريجة مستوى Starters | فرع دمياط الجديدة",
-        t2_text: "\"نظام الامتحانات رائع والشهادة فخمة جداً، والأجمل هو تأمين المحتوى بالعلامة المائية المخصصة. أشعر بالفخر لانتمائي لأكاديمية صيدليات آل مغاوري.\"",
-        t2_name: "د. أحمد عبد الرحمن",
-        t2_job: "خريج مستوى Movers | فرع مدينة دمياط",
-        t3_text: "\"ليفل الوحش (Flyers) كان تحدياً كبيراً، ولكن دبلومة السكر وشرح التركيبات التجميلية جعلتني متمكناً للغاية في إعداد التركيبات للمرضى بدقة شديدة.\"",
+        a1: "يجب التقديم أولاً من رابط 'سجل الآن كمتدرب جديد' وملء استمارة الترشيح. سيقوم مديرو صيدليات آل مغاوري بمراجعة طلبك وإرسال البريد الإلكتروني والرمز السري الخاص بك عند قبولك.",
+        q2: "ما هي فروع صيدليات آل مغاوري؟",
+        a2: "لدينا فروع متميزة تغطي مدينة دمياط الجديدة بالكامل وهي: فرع ابو الخير، فرع البنك، فرع السبعين، فرع الصعيدي القديم، فرع الازهر، بالإضافة إلى قسم الكول سنتر الموحد.",
+        q3: "كيف أنتقل من مستوى إلى آخر؟",
+        a3: "بمجرد مشاهدتك لجميع الفيديوهات المطلوبة لمستواك الحالي، سيفتح لك اختبار التقييم التلقائي. بعد اجتياز الامتحان بنجاح، سيتم إرسال طلب الترقية للمشرف لاعتماده وترقيتك فوراً للمستوى التالي.",
+        q4: "هل الشهادات الصادرة مجانية ومعتمدة؟",
+        a4: "نعم، جميع الشهادات الصادرة لكل مرحلة مجانية تماماً للمتدربين المقبولين داخل صيدليات آل مغاوري، وتحمل توقيع د. أحمد فاضل وتكون معتمدة وصالحة للطباعة الفورية.",
+        test_title: "آراؤنا وقصص نجاحنا",
+        test_desc: "تجارب وقصص نجاح حقيقية لطلاب الصيدلة الذين أتموا تدريبهم بنجاح داخل الأكاديمية.",
+        t1_text: "\"كان التدريب في صيدليات آل مغاوري نقطة تحول هامة في مساري المهني. تنظيم المنهج والمستويات وسهولة متابعة المحاضرات جعلني أمتلك ثقة تامة أثناء التعامل مع الحالات والـ OTC.\"",
+        t1_name: "د. آلاء محمود",
+        t1_job: "خريجة مستوى Movers | فرع البنك",
+        t2_text: "\"المنصة رائعة وتفاعلية جداً، والاختبارات تقيس مدى استيعابنا بدقة. بفضل إرشادات د. أحمد فاضل تمكنت من الارتقاء إلى المستوى الثالث في وقت قياسي.\"",
+        t2_name: "د. محمد الشناوي",
+        t2_job: "خريج مستوى Starters | فرع السبعين",
+        t3_text: "\"ليفل الوحش كان تحدياً كبيراً، ولكن دبلومة السكر وشرح التركيبات التجميلية جعلتني متمكناً للغاية في إعداد التركيبات للمرضى بدقة شديدة.\"",
         t3_name: "د. سارة إبراهيم",
-        t3_job: "خريجة مستوى Flyers | فرع أبو الخير",
+        t3_job: "خريجة ليفل الوحش | فرع أبو الخير",
         foot_bio: "منصة PharmReady هي منصة تعليمية وتدريبية مبتكرة تقدم دبلومات ومحاضرات تدريبية مخصصة لصيادلة صيدليات آل مغاوري لتهيئة مهاراتهم الميدانية لتقديم أفضل جودة رعاية صحية.",
         foot_links_title: "روابط تهمك",
         foot_contact_title: "تواصل معنا",
+        foot_addr: "دمياط الجديدة - فروع صيدليات آل مغاوري",
         foot_news_title: "النشرة الدورية",
         foot_news_desc: "اشترك لتصلك أحدث المقررات والتحديثات التدريبية فور صدورها.",
-        foot_addr: "فرع دمياط الجديدة (الرئيسي)",
-        foot_register: "انضم إلينا",
-        login_title: "بوابة دخول المتدربين",
-        login_desc: "يرجى تسجيل الدخول لمشاهدة محاضرات مستواك المخصص وإتمام الامتحانات.",
+        footer_text: "برمجة وتطوير د. أحمد فاضل © 2026 | جميع الحقوق محفوظة لصيدليات آل مغاوري",
+        menu_waiting: "صفحة الانتظار",
+        menu_admin: "لوحة المدير",
+        admin_prompt: "هل أنت مدير المنصة؟",
+        join_now: "سجل بياناتك لطلب الانضمام",
+        no_account: "متدرب جديد؟",
+        or_check: "أو تحقق من حالة طلبك عبر",
+        waiting_page_link: "صفحة الانتظار",
         email_label: "البريد الإلكتروني المنشأ لك",
         pass_label: "كلمة المرور المؤقتة أو الخاصة بك",
         btn_login: "تسجيل الدخول للمنصة",
-        no_account: "متدرب جديد؟",
-        join_now: "سجل بياناتك لطلب الانضمام",
-        or_check: "أو تحقق من حالة طلبك عبر",
-        waiting_page_link: "صفحة الانتظار",
-        footer_text: "برمجة وتطوير د. أحمد فاضل © 2026 | جميع الحقوق محفوظة لصيدليات آل مغاوري",
+        login_title: "بوابة دخول المتدربين",
+        login_desc: "يرجى تسجيل الدخول لمشاهدة محاضرات مستواك المخصص وإتمام الامتحانات.",
         login_loading: "جاري التحقق...",
-        login_success: "🎉 تم تسجيل الدخول بنجاح! جاري تحويلك لوحة الطالب...",
-        connection_error: "حدث خطأ أثناء محاولة الاتصال بالخادم.",
-        menu_admin: "لوحة المدير",
-        admin_prompt: "هل أنت مدير المنصة؟"
+        login_success: "🎉 تم تسجيل الدخول بنجاح! جاري تحويلك للوحة المتدرب...",
+        connection_error: "حدث خطأ أثناء الاتصال بقاعدة البيانات السحابية."
       },
       en: {
         logo_title: "El-Maghawry Pharmacies",
-        logo_sub: "Trainees Job Market Qualification System",
+        logo_sub: "Trainee LMS & Preparation Platform",
         menu_home: "Home",
-        menu_levels: "Syllabus Levels",
-        menu_about: "About Us",
-        menu_contact: "Contact Us",
-        menu_waiting: "Waiting Page",
+        menu_levels: "Syllabus & Levels",
+        menu_waiting: "Waiting List",
         btn_login_nav: "Sign In",
-        hero_title: "Welcome to <span>PharmReady</span> Platform 🚀",
-        hero_desc: "Discover a world of practical knowledge and clinical skills with El-Maghawry Pharmacies Group. Join us now and launch your qualification path.",
+        hero_title: "Welcome to <span>PharmReady</span> 🚀",
+        hero_desc: "Explore clinical knowledge and practical skills with El-Maghawry Pharmacies. Join us now and start your interactive training journey to fit perfectly in the pharmaceutical job market.",
         hero_users: "+150 Active Trainees",
-        btn_register_now: "Register Now (New Student)",
+        btn_register_now: "Register Now (New Trainee)",
         btn_discover_more: "Discover More",
-        feat_1_title: "Search the Syllabus",
-        feat_1_desc: "Browse our comprehensive structured training path",
-        feat_2_title: "Learn with the Trainer",
-        feat_2_desc: "Interactive video lectures by Dr. Ahmed Fadel",
-        feat_3_title: "Complete the Courses",
-        feat_3_desc: "Pass level exams and print your verified certificate",
-        cat_title: "Discover Training Syllabi",
-        cat_desc: "Browse through training levels and departments to specialize and develop field experiences.",
-        cat_form: "Pharmacy & Formulations",
-        cat_otc: "Field Training & OTC",
+        feat_1_title: "Search Syllabus",
+        feat_1_desc: "Browse our comprehensive classified training levels",
+        feat_2_title: "Learn with Trainer",
+        feat_2_desc: "Interactive video tutorials by Dr. Ahmed Fadel",
+        feat_3_title: "Complete Lessons",
+        feat_3_desc: "Pass assessments and instantly print certified credentials",
+        cat_title: "Explore Training Tracks",
+        cat_desc: "Discover training tracks and structured paths you can enroll in.",
+        cat_form: "Compounding & Pharmaceutics",
+        cat_otc: "Clinical OTC & Training",
         cat_pharma: "Basic Pharmacology",
-        cat_cosmo: "Dermacosmetics & Care",
-        cat_diab: "Diabetes & Chronic Diseases",
-        how_title: "How does PharmReady work?",
-        how_desc: "Through simple and clear steps, you can qualify yourself for the pharmacy job market.",
-        step_1_title: "Register & Verify",
-        step_1_desc: "Submit your details and specify your training branch to get verified.",
-        step_2_title: "Study Lectures",
-        step_2_desc: "Watch the video lectures assigned to your current level and track progress.",
-        step_3_title: "Stage Exam",
-        step_3_desc: "Complete the multiple choice stage quiz with a passing rate of 80% or more.",
-        step_4_title: "Certificate & Promotion",
-        step_4_desc: "Get promoted by the supervisor to the next level and print your certification.",
-        key_title: "Why PharmReady Academy?",
-        key_desc: "Advanced LMS platform built to host and organize clinical training safely and efficiently.",
-        key_1: "Flexibility & Self Study",
-        key_2: "Secure Video Content",
+        cat_cosmo: "Skincare & Cosmetics",
+        cat_diab: "Beast Level & Compounding",
+        how_title: "How PharmReady Works?",
+        how_desc: "With simple structured phases, qualify yourself and graduate levels successfully.",
+        step_1_title: "Registration",
+        step_1_desc: "Fill in your details and select your assigned branch to be reviewed.",
+        step_2_title: "Learn Content",
+        step_2_desc: "Watch designated video lessons for your current assigned level.",
+        step_3_title: "Level Exam",
+        step_3_desc: "Unlock and pass the stage assessment exam (requires 80% video completion).",
+        step_4_title: "Certification",
+        step_4_desc: "Get promoted by your academic supervisor and print your certificate.",
+        key_title: "Why PharmReady?",
+        key_desc: "An advanced academic LMS engineered to optimize and verify pharmaceutical training.",
+        key_1: "Flexible & Self-Paced",
+        key_2: "Secured Interactive Player",
         key_3: "Smart Progress Tracking",
-        key_4: "Continuous Learning",
-        courses_title: "Most Popular Training Programs",
-        courses_desc: "Browse through certified training syllabi of the four sequential levels.",
-        tab_all: "All",
-        tab_0: "Passengers (Level 0)",
+        key_4: "Continuous Pharmacy Education",
+        courses_title: "Syllabus Levels & Programs",
+        courses_desc: "Explore certified training content across the 5 structured phases.",
+        tab_all: "All Tracks",
+        tab_0: "Passengers (Prep)",
         tab_1: "Starters (Level 1)",
         tab_2: "Movers (Level 2)",
         tab_3: "Flyers (Level 3)",
-        c1_title: "Basics of Pharmacy Practice & Drug Layout",
-        c2_title: "OTC Diagnostics & First Aid Management",
-        c3_title: "Antibiotics Alternatives & Dermacosmetics",
-        c4_title: "Cosmetic Formulations & Diabetes Diploma",
-        c_duration: "3 Lectures",
-        c_duration_2: "3 Lectures",
-        c_duration_3: "2 Lectures",
-        c_duration_4: "2 Lectures",
-        free_tag: "Free",
+        tab_4: "Beast Level 👑 (Level 4)",
+        c1_title: "Introduction to Dispensing & Arrangement",
+        c_duration: "Interactive Lectures",
+        c2_title: "Over-The-Counter (OTC) Drugs & First Aid",
+        c_duration_2: "Interactive Lectures",
+        c3_title: "Antibiotics Alternatives & Medical Lab Analysis",
+        c_duration_3: "Interactive Lectures",
+        c4_title: "Skincare Formulations & Cosmetic Science",
+        c_duration_4: "Interactive Lectures",
+        free_tag: "Free of charge",
         faq_title: "Frequently Asked Questions",
-        faq_desc: "Find answers to general questions about levels, exams, and certifications.",
-        q1: "How can I request an active account?",
-        a1: "Submit your registration request. Once approved, the administrator will generate your secure credentials.",
-        q2: "What are the rules for moving to the next level?",
-        a2: "You must complete watching the level's lectures, pass the MCQ stage exam, and get supervisor approval.",
-        q3: "Are the generated certificates verified?",
-        a3: "Yes, once verified, a digital certificate with a unique validation code is generated and ready to print.",
-        q4: "Can I watch training videos on mobile?",
-        a4: "Yes! The platform is optimized for mobile displays with efficient internet data utilization.",
-        q5: "What are the training branches in Damietta?",
-        a5: "We train at: New Damietta (Main), Damietta City, Abu El-Kheir, El-Corniche, and El-A'asar branches.",
-        q6: "What if I fail the level MCQ exam?",
-        a6: "No worries! You can review the lectures and retake the exam as many times as needed to pass.",
-        test_title: "What do our trainees say?",
-        test_desc: "Success stories of graduates who completed their training and successfully entered the field.",
-        t1_text: "\"OTC and dermacosmetics classes in the academy were a real game changer. The contents are highly practical.\"",
-        t1_name: "Dr. Esraa Mahmoud",
-        t1_job: "Starters Graduate | New Damietta Branch",
-        t2_text: "\"The exam system is fantastic, and watermarked video layout is extremely secure. Proud to be a trainee here.\"",
-        t2_name: "Dr. Ahmed Abdelrahman",
-        t2_job: "Movers Graduate | Damietta City Branch",
-        t3_text: "\"The Beast Level (Flyers) was challenging, but cosmetic preparation diploma made me very confident in compounding.\"",
+        faq_desc: "Everything you need to know about the curriculum, examinations, and certificates.",
+        q1: "How do I get an approved account?",
+        a1: "You must first apply from 'Register Now' form. Our admin team will verify your application and issue your official email/passcode.",
+        q2: "What are El-Maghawry branches?",
+        a2: "We have multiple state-of-the-art branches in New Damietta city: Abou El-Kheir, Banque, Al-Sabeen, Old Saidi, Al-Azhar, and the centralized Call Center.",
+        q3: "How do I transition between levels?",
+        a3: "Once you complete watching all videos, the Level Exam unlocks. Upon passing, a promotion request is automatically sent to the manager.",
+        q4: "Are the certificates verified?",
+        a4: "Yes! All stage certificates are free for our trainees, signed by Dr. Ahmed Fadel, and ready for instant printing.",
+        test_title: "Trainee Stories",
+        test_desc: "Real experiences and success stories of pharmacy trainees who completed their internship.",
+        t1_text: "\"Training at El-Maghawry was a game-changer. The structured levels gave me huge confidence during patient dispensing and OTC diagnostics.\"",
+        t1_name: "Dr. Alaa Mahmoud",
+        t1_job: "Movers Graduate | Banque Branch",
+        t2_text: "\"Excellent interactive LMS! The progress tracking and exams are highly accurate. Thanks to Dr. Ahmed Fadel, I finished Level 2 in record time.\"",
+        t2_name: "Dr. Mohamed El-Shennawy",
+        t2_job: "Starters Graduate | Al-Sabeen Branch",
+        t3_text: "\"The Beast level was challenging, but the cosmetics labs and diabetes diplomas made me highly professional in patient care.\"",
         t3_name: "Dr. Sara Ibrahim",
-        t3_job: "Flyers Graduate | Abu El-Kheir Branch",
-        foot_bio: "PharmReady is an interactive learning platform designed to qualify new pharmacy graduates and students for El-Maghawry Pharmacies Group.",
-        foot_links_title: "Quick Links",
-        foot_contact_title: "Contact Info",
+        t3_job: "Beast Level Graduate | Abou El-Kheir Branch",
+        foot_bio: "PharmReady is an innovative LMS designed to empower and evaluate pharmacists at El-Maghawry Group to deliver state-of-the-art medical services.",
+        foot_links_title: "Useful Links",
+        foot_contact_title: "Contact Us",
+        foot_addr: "New Damietta - El-Maghawry Pharmacies Group",
         foot_news_title: "Newsletter",
-        foot_news_desc: "Subscribe to receive latest syllabi updates and training announcements.",
-        foot_addr: "New Damietta Branch (HQ)",
-        foot_register: "Register Request",
-        login_title: "Trainees Portal Login",
-        login_desc: "Please log in to watch lectures assigned to your current level and complete exams.",
-        email_label: "Your Assigned Email Address",
-        pass_label: "Your Temporary/Current Password",
-        btn_login: "Sign In to Platform",
-        no_account: "New trainee?",
-        join_now: "Register your request to join",
-        or_check: "Or check your request status on the",
-        waiting_page_link: "Waiting Page",
+        foot_news_desc: "Subscribe to get updates on newly published clinical tracks.",
         footer_text: "Engineered by Dr. Ahmed Fadel © 2026 | El-Maghawry Pharmacies Group",
+        menu_waiting: "Waiting List",
+        menu_admin: "Admin Control Panel",
+        admin_prompt: "Are you an Admin?",
+        join_now: "Submit Registration Request",
+        no_account: "New trainee?",
+        or_check: "Or check status on",
+        waiting_page_link: "Waiting List",
+        email_label: "Assigned Official Email",
+        pass_label: "Your Secure Passcode",
+        btn_login: "Sign In to Platform",
+        login_title: "Trainees Login Portal",
+        login_desc: "Please log in to watch designated videos and complete stage exams.",
         login_loading: "Verifying...",
-        login_success: "🎉 Logged in successfully! Redirecting to student panel...",
-        connection_error: "Connection to database failed.",
-        menu_admin: "Admin Panel",
-        admin_prompt: "Are you an administrator?"
+        login_success: "🎉 Logged in successfully! Loading workspace...",
+        connection_error: "Connection to database server failed."
       }
     };
 
     let currentLang = localStorage.getItem("app_lang") || "ar";
     let currentTheme = localStorage.getItem("app_theme") || "sand"; // sand, green, dark
+
+    const emailInput = document.getElementById("trainee-email");
+    const passInput = document.getElementById("trainee-password");
 
     function applySettings() {
       // Theme cycling
@@ -991,9 +988,6 @@
       // Lang direction
       document.documentElement.lang = currentLang;
       document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
-      
-      const emailInput = document.getElementById("trainee-email");
-      const passInput = document.getElementById("trainee-password");
       
       if (currentLang === "ltr") {
         document.querySelectorAll(".level-card").forEach(el => el.style.textAlign = "left");
@@ -1088,12 +1082,12 @@
     const videoIframe = document.getElementById("walkthrough-iframe");
     
     document.getElementById("btn-play-walkthrough").addEventListener("click", () => {
-      videoIframe.src = "https://www.youtube.com/embed/7dyVA3pFKS4?autoplay=1";
-      videoModal.classList.add("active");
+      videoIframe.src = "https://www.youtube.com/embed/7dyVA3pFKS4?autoplay=1&controls=0&rel=0&modestbranding=1&disablekb=1";
+      videoModal.style.display = "flex";
     });
     
     const closeVideoModal = () => {
-      videoModal.classList.remove("active");
+      videoModal.style.display = "none";
       videoIframe.src = "";
     };
     document.getElementById("btn-close-video").addEventListener("click", closeVideoModal);

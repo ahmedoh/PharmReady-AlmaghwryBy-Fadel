@@ -2332,5 +2332,50 @@ body[dir="ltr"] .newsletter-form button {
   transform: rotate(90deg);
 }
 
+/* Strict Logo Styling */
+.logo-img {
+  height: 48px !important;
+  max-height: 48px !important;
+  width: auto !important;
+  max-width: 160px !important;
+  object-fit: contain !important;
+}
+
+/* Level Badges Background & Text Colors */
+.level-badge-Passengers {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  color: #3b82f6 !important;
+}
+.level-badge-Starters {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  color: #10b981 !important;
+}
+.level-badge-Movers {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  color: #f59e0b !important;
+}
+.level-badge-Flyers {
+  background-color: rgba(139, 92, 246, 0.1) !important;
+  color: #8b5cf6 !important;
+}
+.level-badge-Beast {
+  background-color: #fbbf24 !important;
+  color: #000000 !important;
+}
+
+/* Video protection overlay click blocker */
+.video-overlay-protection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  background: transparent;
+  cursor: default;
+  pointer-events: auto;
+}
+
+
 
 

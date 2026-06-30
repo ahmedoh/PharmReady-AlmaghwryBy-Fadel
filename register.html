@@ -87,8 +87,8 @@
       <!-- Header -->
       <div class="auth-header">
         <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-          <img src="logo.png" alt="شعار صيدليات آل مغاوري" class="logo-img" onerror="this.onerror=null; this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
-          <div class="logo-placeholder" id="logo-fallback" style="display: none;">M</div>
+          <img src="logo.png" alt="شعار صيدليات آل مغاوري" class="logo-img" style="height: 48px; max-height: 48px; width: auto; max-width: 160px; object-fit: contain;" onerror="this.onerror=null; this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
+          <div class="logo-placeholder" id="logo-fallback" style="display: none; width: 48px; height: 48px; border-radius: 50%; background: var(--color-primary); color: #fff; align-items: center; justify-content: center; font-size: 20px; font-weight: bold;">M</div>
         </div>
         <h2 data-i18n="reg_title">تسجيل متدرب جديد</h2>
         <p data-i18n="reg_subtitle">يرجى إدخال بياناتك بدقة للانضمام لأكاديمية صيدليات آل مغاوري</p>
@@ -160,11 +160,12 @@
                 <label for="reg-branch" data-i18n="lbl_branch">فرع التدريب <span class="required">*</span></label>
                 <select id="reg-branch" required>
                   <option value="" disabled selected data-i18n="opt_select_branch">اختر الفرع...</option>
-                  <option value="فرع دمياط الجديدة (الرئيسي)">فرع دمياط الجديدة (الرئيسي)</option>
-                  <option value="فرع مدينة دمياط">فرع مدينة دمياط</option>
-                  <option value="فرع أبو الخير">فرع أبو الخير</option>
-                  <option value="فرع الكورنيش">فرع الكورنيش</option>
-                  <option value="فرع الأعصر">فرع الأعصر</option>
+                  <option value="فرع ابو الخير">فرع ابو الخير</option>
+                  <option value="فرع البنك">فرع البنك</option>
+                  <option value="فرع السبعين">فرع السبعين</option>
+                  <option value="فرع الصعيدي القديم">فرع الصعيدي القديم</option>
+                  <option value="فرع الازهر">فرع الازهر</option>
+                  <option value="كول سنتر">كول سنتر</option>
                 </select>
               </div>
 
@@ -175,6 +176,7 @@
                   <option value="Starters">Starters (المستوى الأول)</option>
                   <option value="Movers">Movers (المستوى الثاني)</option>
                   <option value="Flyers">Flyers (المستوى الثالث)</option>
+                  <option value="Beast">ليفل الوحش 👑 (المستوى الرابع - الأصعب)</option>
                 </select>
               </div>
             </div>
@@ -187,25 +189,21 @@
 
             <div class="form-group">
               <label style="color: var(--text-main); font-size: 15px; font-weight: bold; margin-bottom: 10px;" data-i18n="security_question">
-                كم عدد فروع صيدليات آل مغاوري، وأين تقع هذه الفروع (داخل حيز محافظة مين)؟
+                أين تقع جميع فروع صيدليات آل مغاوري؟
               </label>
               
               <div class="radio-group">
                 <label class="radio-option">
                   <input type="radio" name="security-choice" value="0" required>
-                  <span class="radio-option-text" data-i18n="sec_opt_1">3 فروع تقع في محافظة القاهرة.</span>
+                  <span class="radio-option-text" data-i18n="sec_opt_1">في مدينة دمياط القديمة فقط.</span>
                 </label>
                 <label class="radio-option">
                   <input type="radio" name="security-choice" value="1">
-                  <span class="radio-option-text" style="color: var(--color-primary);" data-i18n="sec_opt_2">5 فروع تقع داخل حيز محافظة دمياط (دمياط الجديدة / دمياط).</span>
+                  <span class="radio-option-text" style="color: var(--color-primary);" data-i18n="sec_opt_2">في مدينة دمياط الجديدة فقط.</span>
                 </label>
                 <label class="radio-option">
                   <input type="radio" name="security-choice" value="2">
-                  <span class="radio-option-text" data-i18n="sec_opt_3">2 فروع تقع في محافظة الإسكندرية.</span>
-                </label>
-                <label class="radio-option">
-                  <input type="radio" name="security-choice" value="3">
-                  <span class="radio-option-text" data-i18n="sec_opt_4">فرع واحد يقع في محافظة الدقهلية (المنصورة).</span>
+                  <span class="radio-option-text" data-i18n="sec_opt_3">في محافظتي القاهرة والإسكندرية.</span>
                 </label>
               </div>
             </div>
@@ -264,11 +262,10 @@
         lbl_target_level: "المستوى المطلوب الانضمام له",
         step3_title: "التحقق وسؤال الأمان",
         security_verify_desc: "لإتمام التسجيل، يرجى الإجابة على السؤال الأمني التالي الخاص بفروع صيدليات آل مغاوري:",
-        security_question: "كم عدد فروع صيدليات آل مغاوري، وأين تقع هذه الفروع (داخل حيز محافظة مين)؟",
-        sec_opt_1: "3 فروع تقع في محافظة القاهرة.",
-        sec_opt_2: "5 فروع تقع داخل حيز محافظة دمياط (دمياط الجديدة / دمياط).",
-        sec_opt_3: "2 فروع تقع في محافظة الإسكندرية.",
-        sec_opt_4: "فرع واحد يقع في محافظة الدقهلية (المنصورة).",
+        security_question: "أين تقع جميع فروع صيدليات آل مغاوري؟",
+        sec_opt_1: "في مدينة دمياط القديمة فقط.",
+        sec_opt_2: "في مدينة دمياط الجديدة فقط.",
+        sec_opt_3: "في محافظتي القاهرة والإسكندرية.",
         btn_prev: "السابق",
         btn_next: "التالي",
         btn_submit_request: "تقديم طلب الاشتراك",
@@ -306,11 +303,10 @@
         lbl_target_level: "Initial Target Training Level",
         step3_title: "Security Verification",
         security_verify_desc: "To finalize registration, please answer the security check regarding El-Maghawry branches:",
-        security_question: "How many branches do El-Maghawry Pharmacies have and where are they located (within which Governorate)?",
-        sec_opt_1: "3 branches located in Cairo Governorate.",
-        sec_opt_2: "5 branches located within Damietta Governorate (New Damietta / Damietta city).",
-        sec_opt_3: "2 branches located in Alexandria Governorate.",
-        sec_opt_4: "One single branch located in Dakahlia Governorate (Mansoura).",
+        security_question: "Where are all El-Maghawry Pharmacies branches located?",
+        sec_opt_1: "In Old Damietta city only.",
+        sec_opt_2: "In New Damietta city only.",
+        sec_opt_3: "In Cairo and Alexandria Governorates.",
         btn_prev: "Previous",
         btn_next: "Next",
         btn_submit_request: "Submit Subscription Request",

@@ -8,206 +8,12 @@
  *    using browser LocalStorage, allowing you to test everything immediately without Google Sheets!
  */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbw9zln-g87fC5nXvIDhFYWYOkdWk99zQPK020pMVmgZEbsaJVU8_x8cveY3M3RRDwCk/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxBtQhRO0HYZM8udwsGxHOSB-_LkpPFknu0xTiU2TI8yhc4hVkb7K2RgcqF7QlRYtCf/exec";
 
 // Check if we are running in Demo Mode
-const isDemoMode = !API_URL || API_URL.includes("https://script.google.com/macros/s/AKfycbw9zln-g87fC5nXvIDhFYWYOkdWk99zQPK020pMVmgZEbsaJVU8_x8cveY3M3RRDwCk/exec");
+const isDemoMode = !API_URL || API_URL.includes("YOUR_GOOGLE_APPS_SCRIPT");
 
 console.log(isDemoMode ? "🚀 Running in DEMO MODE (using LocalStorage)" : "🌐 Running in CLOUD MODE (connected to Google Sheets)");
-
-/**
- * Quiz Questions Data for Level Exams
- */
-const EXAM_QUESTIONS = {
-  "Passengers": [
-    {
-      q: "ما هو الهدف الأساسي من آداب وأخلاقيات مهنة الصيدلة؟",
-      q_en: "What is the primary goal of pharmacy professional ethics?",
-      options: [
-        "زيادة أرباح الصيدلية المادية بأي طريقة كانت.",
-        "تقديم مصلحة ورعاية المريض بأعلى معايير الأمان والأخلاق.",
-        "التنافس غير الشريف مع الصيدليات المجاورة."
-      ],
-      options_en: [
-        "Increasing pharmacy profits by any means.",
-        "Prioritizing patient care and safety with the highest ethical standards.",
-        "Unfair competition with neighboring pharmacies."
-      ],
-      correct: 1
-    },
-    {
-      q: "ما هي درجة الحرارة المناسبة لتخزين الأنسولين واللقاحات الحيوية؟",
-      q_en: "What is the appropriate storage temperature for insulin and vaccines?",
-      options: [
-        "في درجة حرارة الغرفة العادية (25 مئوية).",
-        "تحت الصفر المطلق في الفريزر.",
-        "في الثلاجة بين درجة حرارة 2 إلى 8 درجات مئوية."
-      ],
-      options_en: [
-        "At normal room temperature (25°C).",
-        "Below zero in the freezer.",
-        "In the refrigerator between 2°C and 8°C."
-      ],
-      correct: 2
-    },
-    {
-      q: "ما هي الخطوة الأولى المهنية عند استلام وصفة طبية (روشتة) من المريض؟",
-      q_en: "What is the first professional step when receiving a prescription from a patient?",
-      options: [
-        "صرف الأدوية بسرعة دون مراجعة تفاصيل الجرعات.",
-        "قراءتها بدقة والتحقق من اسم المريض والجرعات وتوافق المكونات.",
-        "إخبار المريض بنقص الأدوية دون التحقق من الرفوف."
-      ],
-      options_en: [
-        "Dispensing medications quickly without reviewing dosage details.",
-        "Reading it carefully and verifying patient name, dosage, and compatibility.",
-        "Telling the patient medications are out of stock without checking shelves."
-      ],
-      correct: 1
-    },
-    {
-      q: "ماذا يرمز مصطلح OTC في عالم الصيدلة؟",
-      q_en: "What does the term OTC stand for in pharmacy?",
-      options: [
-        "الأدوية المخدرة والممنوعة قانونياً بدون موافقة أمنية.",
-        "الأدوية التي يمكن صرفها بأمان للمريض دون روشتة طبية لعلاج أعراض بسيطة.",
-        "أدوية غرف الطوارئ والعمليات الحرجة فقط."
-      ],
-      options_en: [
-        "Narcotics legally prohibited without security approval.",
-        "Medications that can be safely dispensed without a prescription for mild symptoms.",
-        "Emergency room and critical surgery medications only."
-      ],
-      correct: 1
-    },
-    {
-      q: "كيف تتصرف إذا طلب مريض دواء ناقصاً في السوق وليس له بديل مباشر؟",
-      q_en: "How do you act if a patient requests a out-of-stock medication with no direct alternative?",
-      options: [
-        "تصرف له أي علبة دواء متوفرة لديك لتعويضه.",
-        "تطلب منه مغادرة الصيدلية والبحث في مكان آخر بنبرة جافة.",
-        "تنصحه بالرجوع للطبيب المعالج لتغيير الدواء، أو تبحث معه عن بدائل تحت إشراف المشرف."
-      ],
-      options_en: [
-        "Dispensing any available medication box to compensate him.",
-        "Asking him dryly to leave the pharmacy and search elsewhere.",
-        "Advising him to consult the treating doctor to change the drug, or look for alternatives under supervision."
-      ],
-      correct: 2
-    }
-  ],
-  "Starters": [
-    {
-      q: "ما هو البروتوكول الأولي المعتمد في حقيبة الإسعافات الأولية للتعامل مع حرق من الدرجة الأولى؟",
-      q_en: "What is the primary protocol in a first aid kit to handle a first-degree burn?",
-      options: [
-        "وضع معجون الأسنان أو الزبدة مباشرة فوق موضع الحرق.",
-        "وضع ماء جاري فاتر (وليس بارداً جداً) لمدة 10-15 دقيقة ثم استخدام مرهم حروق.",
-        "تغطية الحرق بلاصق طبي غير معقم فوراً لمنع التنفس."
-      ],
-      options_en: [
-        "Applying toothpaste or butter directly onto the burn site.",
-        "Placing under cool running water (not freezing) for 10-15 minutes, then using a burn ointment.",
-        "Covering the burn immediately with a non-sterile adhesive tape to block air."
-      ],
-      correct: 1
-    },
-    {
-      q: "أي المجموعات الدوائية التالية تستخدم لخفض الحرارة وتسكين الآلام بأمان للأطفال؟",
-      q_en: "Which of the following drug classes is used to safely reduce fever and relieve pain in children?",
-      options: [
-        "مادة الباراسيتامول (Paracetamol) بالجرعة المحسوبة حسب وزن الطفل.",
-        "مادة الأسبرين (Aspirin) بجرعات كبيرة لضمان سرعة المفعول.",
-        "مضادات الالتهاب غير الستيرويدية دون استشارة طبية."
-      ],
-      options_en: [
-        "Paracetamol in a calculated dose based on the child's weight.",
-        "Aspirin in high doses to guarantee quick action.",
-        "Non-steroidal anti-inflammatory drugs (NSAIDs) without medical consultation."
-      ],
-      correct: 0
-    },
-    {
-      q: "ما هو تصنيف مادة (Ibuprofen) الطبي وكيف يجب نصح المريض بتناوله؟",
-      q_en: "What is the medical classification of Ibuprofen, and how should you advise the patient to take it?",
-      options: [
-        "مضاد حيوي قوي، ويجب تناوله على معدة فارغة تماماً.",
-        "مسكن ألم ومضاد التهاب غير ستيرويدي (NSAID)، ويجب تناوله بعد الأكل لتجنب تهيج المعدة.",
-        "فيتامين مقوي للأعصاب، ويؤخذ قبل النوم مباشرة."
-      ],
-      options_en: [
-        "A strong antibiotic, to be taken on an empty stomach.",
-        "A non-steroidal anti-inflammatory drug (NSAID) painkiller, to be taken after meals to avoid stomach irritation.",
-        "A nerve-supporting vitamin, taken right before bed."
-      ],
-      correct: 1
-    }
-  ],
-  "Movers": [
-    {
-      q: "ما هو التحذير الحرج للغاية الذي يجب توجيهه للمريض عند صرف مضاد حيوي من عائلة (Fluoroquinolones) مثل Ciprofloxacin؟",
-      q_en: "What is the highly critical warning to give a patient when dispensing a Fluoroquinolone antibiotic like Ciprofloxacin?",
-      options: [
-        "عدم تناوله مع الحليب أو المكملات الغذائية المحتوية على الكالسيوم أو الحديد لأنه يقلل امتصاصه.",
-        "ضرورة تناوله مع عصائر الحمضيات المركزة لزيادة قوته.",
-        "تناوله مع القهوة والشاي فقط لتجنب الدوخة."
-      ],
-      options_en: [
-        "Do not take with milk or calcium/iron supplements as it reduces absorption.",
-        "Must be taken with concentrated citrus juices to increase strength.",
-        "Take it with coffee and tea only to avoid dizziness."
-      ],
-      correct: 0
-    },
-    {
-      q: "ما هو الفحص المخبري الأساسي المستخدم لتشخيص ومتابعة علاج مرضى السكري على المدى الطويل (3 أشهر)؟",
-      q_en: "What is the primary lab test used to diagnose and monitor long-term (3-month) diabetes treatment?",
-      options: [
-        "فحص السكر العشوائي (RBS).",
-        "فحص السكر التراكمي (HbA1c).",
-        "تحليل البول العام لوجود الأسيتون."
-      ],
-      options_en: [
-        "Random Blood Sugar (RBS).",
-        "Glycated Hemoglobin (HbA1c) / Cumulative Sugar.",
-        "General urinalysis for acetone."
-      ],
-      correct: 1
-    }
-  ],
-  "Flyers": [
-    {
-      q: "عند تحضير تركيبة صيدلانية تجميلية تحتوي على فيتامين C، كيف يجب حماية المستحضر من الأكسدة وتلف المادة الفعالة؟",
-      q_en: "When preparing a cosmetic formulation containing Vitamin C, how should you protect the product from oxidation and active degradation?",
-      options: [
-        "تعبئته في عبوات زجاجية معتمة أو داكنة اللون، وحفظه في مكان بارد وبعيد عن الضوء والهواء.",
-        "إضافة كميات كبيرة من الكحول الطبي لتعقيم المحلول وتسريع التطاير.",
-        "تركه معرضاً للهواء المباشر والضوء لتنشيط جزيئات الفيتامين."
-      ],
-      options_en: [
-        "Packaging it in opaque or dark amber glass bottles, storing it in a cool place away from light and air.",
-        "Adding large amounts of rubbing alcohol to sterilize the solution and accelerate evaporation.",
-        "Leaving it exposed to direct air and light to activate vitamin molecules."
-      ],
-      correct: 0
-    },
-    {
-      q: "ما هي المعادلة الذهبية المتبعة لإدارة طلبيات الأدوية والنواقص في الصيدلية لضمان عدم ركود البضائع؟",
-      q_en: "What is the golden equation for managing drug orders and shortages in the pharmacy to avoid stagnant stock?",
-      options: [
-        "شراء كميات ضخمة من جميع الأصناف دون النظر لمعدل الاستهلاك اليومي.",
-        "حساب معدل السحب اليومي والشهري لكل صنف، والطلب بناءً على حد الأمان والطلب الأدنى (Min/Max Level).",
-        "إيقاف الطلبيات تماماً والاعتماد فقط على تبادل الأصناف مع الصيدليات الأخرى."
-      ],
-      options_en: [
-        "Buying huge quantities of all items regardless of daily consumption rate.",
-        "Calculating daily/monthly consumption for each item and ordering based on Min/Max safety levels.",
-        "Stopping orders completely and relying solely on stock swaps with other pharmacies."
-      ],
-      correct: 1
-    }
-  ]
-};
 
 /**
  * API Request Wrapper
@@ -268,8 +74,8 @@ function handleDemoRequest(params) {
         WhatsApp: "01012345678",
         College: "الصيدلة",
         Squad: "الفرقة الخامسة",
-        University: "جامعة دمياط",
-        TrainingBranch: "فرع دمياط الجديدة (الرئيسي)",
+        University: "جامعة دمياط الأهلية",
+        TrainingBranch: "فرع ابو الخير",
         Status: "pending",
         Email: "",
         Password: "",
@@ -284,8 +90,8 @@ function handleDemoRequest(params) {
         WhatsApp: "01234567890",
         College: "الصيدلة",
         Squad: "الفرقة الرابعة",
-        University: "جامعة المنصورة",
-        TrainingBranch: "فرع دمياط الجديدة (الرئيسي)",
+        University: "جامعة المنصورة الأهلية",
+        TrainingBranch: "فرع البنك",
         Status: "accepted",
         Email: "trainee.omar@maghawry.com",
         Password: "pass-1234",
@@ -298,23 +104,46 @@ function handleDemoRequest(params) {
       // Level 0 (Passengers)
       { VideoId: "d3_xQ4o6N38", Title: "آداب وأخلاقيات مهنة الصيدلة والتعامل مع الفريق", Level: "Passengers", Url: "https://www.youtube.com/watch?v=d3_xQ4o6N38" },
       { VideoId: "w3wHwT8w-8s", Title: "مقدمة التدريب العملي في صيدليات آل مغاوري", Level: "Passengers", Url: "https://www.youtube.com/watch?v=w3wHwT8w-8s" },
-      { VideoId: "e9R8m4bHjU0", Title: "أقسام الصيدلية وكيفية ترتيب الأدوية وحفظها", Level: "Passengers", Url: "https://www.youtube.com/watch?v=e9R8m4bHjU0" },
       
       // Level 1 (Starters)
       { VideoId: "qY-0hK-oM-0", Title: "1️⃣ OTC - تشخيص وعلاج نزلات البرد والإنفلونزا", Level: "Starters", Url: "https://www.youtube.com/watch?v=qY-0hK-oM-0" },
-      { VideoId: "tV1yWzL3O8s", Title: "3️⃣ First aid - الإسعافات الأولية للجروح والكسور والنزيف", Level: "Starters", Url: "https://www.youtube.com/watch?v=tV1yWzL3O8s" },
-      { VideoId: "uW8zN7dJ3m4", Title: "8️⃣ Basic Pharma - أساسيات تصنيف وحساب جرعات الأدوية", Level: "Starters", Url: "https://www.youtube.com/watch?v=uW8zN7dJ3m4" },
       
       // Level 2 (Movers)
-      { VideoId: "zK6yW4o9Jt4", Title: "2️⃣ Antibiotics - بدائل وحساب جرعات المضادات الحيوية للأطفال", Level: "Movers", Url: "https://www.youtube.com/watch?v=zK6yW4o9Jt4" },
-      { VideoId: "mN2yW6b3M8y", Title: "6️⃣ Medical Analysis - قراءة التحاليل الطبية وفحص وظائف الكبد والكلى", Level: "Movers", Url: "https://www.youtube.com/watch?v=mN2yW6b3M8y" }
+      { VideoId: "zK6yW4o9Jt4", Title: "2️⃣ Antibiotics - بدائل وحساب جرعات المضادات الحيوية للأطفال", Level: "Movers", Url: "https://www.youtube.com/watch?v=zK6yW4o9Jt4" }
     ]);
     
+    // Seed default Admins
+    saveTable("Admins", [
+      { Timestamp: new Date().toISOString(), Username: "madmody", Password: "madmody", Role: "Owner" }
+    ]);
+
+    // Seed default Questions
+    saveTable("Questions", [
+      // Level 0 (Passengers)
+      { Timestamp: new Date().toISOString(), Level: "Passengers", QuestionAr: "ما هو الهدف الأساسي من آداب وأخلاقيات مهنة الصيدلة؟", QuestionEn: "What is the primary goal of pharmacy professional ethics?", Option1Ar: "زيادة أرباح الصيدلية المادية بأي طريقة كانت.", Option1En: "Increasing pharmacy profits by any means.", Option2Ar: "تقديم مصلحة ورعاية المريض بأعلى معايير الأمان والأخلاق.", Option2En: "Prioritizing patient care and safety with the highest ethical standards.", Option3Ar: "التنافس غير الشريف مع الصيدليات المجاورة.", Option3En: "Unfair competition with neighboring pharmacies.", CorrectIndex: "1" },
+      { Timestamp: new Date().toISOString(), Level: "Passengers", QuestionAr: "ما هي درجة الحرارة المناسبة لتخزين الأنسولين واللقاحات الحيوية؟", QuestionEn: "What is the appropriate storage temperature for insulin and vaccines?", Option1Ar: "في درجة حرارة الغرفة العادية (25 مئوية).", Option1En: "At normal room temperature (25°C).", Option2Ar: "تحت الصفر المطلق في الفريزر.", Option2En: "Below zero in the freezer.", Option3Ar: "في الثلاجة بين درجة حرارة 2 إلى 8 درجات مئوية.", Option3En: "In the refrigerator between 2°C and 8°C.", CorrectIndex: "2" },
+      { Timestamp: new Date().toISOString(), Level: "Passengers", QuestionAr: "أين تقع جميع فروع صيدليات آل مغاوري؟", QuestionEn: "Where are all El-Maghawry Pharmacies branches located?", Option1Ar: "في مدينة دمياط القديمة", Option1En: "In Old Damietta city", Option2Ar: "في مدينة دمياط الجديدة فقط", Option2En: "In New Damietta city only", Option3Ar: "في القاهرة والإسكندرية", Option3En: "In Cairo and Alexandria", CorrectIndex: "1" },
+      
+      // Level 1 (Starters)
+      { Timestamp: new Date().toISOString(), Level: "Starters", QuestionAr: "ما هو البروتوكول الأولي المعتمد للتعامل مع حرق من الدرجة الأولى؟", QuestionEn: "What is the primary protocol to handle a first-degree burn?", Option1Ar: "وضع معجون الأسنان أو الزبدة مباشرة فوق موضع الحرق.", Option1En: "Applying toothpaste or butter directly onto the burn site.", Option2Ar: "وضع ماء جاري فاتر لمدة 10-15 دقيقة ثم استخدام مرهم حروق.", Option2En: "Placing under cool running water for 10-15 minutes, then using a burn ointment.", Option3Ar: "تغطية الحرق بلاصق طبي غير معقم فوراً.", Option3En: "Covering the burn immediately with a non-sterile adhesive tape.", CorrectIndex: "1" },
+      
+      // Level 2 (Movers)
+      { Timestamp: new Date().toISOString(), Level: "Movers", QuestionAr: "ما هو التحذير الحرج للغاية الذي يجب توجيهه للمريض عند صرف مضاد حيوي من عائلة (Fluoroquinolones)؟", QuestionEn: "What is the highly critical warning when dispensing a Fluoroquinolone antibiotic?", Option1Ar: "عدم تناوله مع الحليب أو الكالسيوم أو الحديد لأنه يقلل امتصاصه.", Option1En: "Do not take with milk or calcium/iron supplements as it reduces absorption.", Option2Ar: "ضرورة تناوله مع عصائر الحمضيات المركزة لزيادة قوته.", Option2En: "Must be taken with concentrated juice.", Option3Ar: "تناوله مع القهوة فقط.", Option3En: "Take it with coffee only.", CorrectIndex: "0" }
+    ]);
+
     saveTable("Progress", []);
     saveTable("Promotions", []);
     saveTable("Notifications", []);
     localStorage.setItem("maghawry_db_seeded", "true");
   }
+
+  // Helper helper
+  const verifyLocalAdmin = (pass) => {
+    const trimmedPass = String(pass).trim().toLowerCase();
+    if (trimmedPass === "madmody") return true;
+    const admins = getTable("Admins");
+    return admins.some(x => String(x.Password).trim().toLowerCase() === trimmedPass);
+  };
 
   // API router
   if (action === "register") {
@@ -372,19 +201,24 @@ function handleDemoRequest(params) {
     const trainees = getTable("Trainees");
     const email = String(params.email).trim().toLowerCase();
     const password = String(params.password).trim();
-    const t = trainees.find(x => x.Status === "accepted" && String(x.Email).trim().toLowerCase() === email && String(x.Password).trim() === password);
+    const t = trainees.find(x => String(x.Email).trim().toLowerCase() === email && String(x.Password).trim() === password);
     
     if (t) {
-      return {
-        success: true,
-        trainee: {
-          name: t.Name,
-          email: t.Email,
-          phone: t.Phone,
-          branch: t.TrainingBranch,
-          level: t.CurrentLevel || "Passengers"
-        }
-      };
+      if (t.Status === "blocked") {
+        return { success: false, message: "تم حظر هذا الحساب من قبل الإدارة!" };
+      }
+      if (t.Status === "accepted") {
+        return {
+          success: true,
+          trainee: {
+            name: t.Name,
+            email: t.Email,
+            phone: t.Phone,
+            branch: t.TrainingBranch,
+            level: t.CurrentLevel || "Passengers"
+          }
+        };
+      }
     }
     return { success: false, message: "البريد الإلكتروني أو كلمة المرور غير صحيحة، أو أن حسابك لم يتم قبوله بعد." };
     
@@ -434,13 +268,26 @@ function handleDemoRequest(params) {
     const completedLevels = promotions.filter(x => String(x.Email).trim().toLowerCase() === email && x.Status === "approved").map(x => String(x.FromLevel));
     const pendingPromotion = promotions.some(x => String(x.Email).trim().toLowerCase() === email && x.Status === "pending");
     
+    // Load local questions dynamically for their level
+    const allQuestions = getTable("Questions");
+    const levelQuestions = allQuestions.filter(x => String(x.Level).trim() === currentLevel).map(x => {
+      return {
+        q: x.QuestionAr,
+        q_en: x.QuestionEn,
+        options: [x.Option1Ar, x.Option2Ar, x.Option3Ar].filter(Boolean),
+        options_en: [x.Option1En, x.Option2En, x.Option3En].filter(Boolean),
+        correct: parseInt(x.CorrectIndex) || 0
+      };
+    });
+
     return {
       success: true,
       videos: filteredVideos,
       watched: watched,
       currentLevel: currentLevel,
       completedLevels: completedLevels,
-      pendingPromotion: pendingPromotion
+      pendingPromotion: pendingPromotion,
+      questions: levelQuestions
     };
     
   } else if (action === "updateProgress") {
@@ -496,24 +343,22 @@ function handleDemoRequest(params) {
       Status: "pending"
     });
     saveTable("Promotions", promotions);
-    
     return { success: true, message: "تم إرسال طلب الترقية وإصدار الشهادة بنجاح للمدير." };
-    
 
   } else if (action === "adminLogin") {
-    if (String(params.password).trim() === "madmody") {
+    if (verifyLocalAdmin(params.password)) {
       return { success: true, message: "تم تسجيل الدخول بنجاح كمدير." };
     }
     return { success: false, message: "رمز المرور غير صحيح." };
     
   } else if (action === "adminGetTrainees") {
-    if (String(params.adminPassword).trim() !== "madmody") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
       return { success: false, message: "غير مصرح بالدخول." };
     }
     return { success: true, trainees: getTable("Trainees") };
     
   } else if (action === "adminAction") {
-    if (String(params.adminPassword).trim() !== "madmody") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
       return { success: false, message: "غير مصرح بالعملية." };
     }
     const trainees = getTable("Trainees");
@@ -538,16 +383,15 @@ function handleDemoRequest(params) {
     return { success: false, message: "لم يتم العثور على المتدرب." };
     
   } else if (action === "adminGetVideos") {
-    if (String(params.adminPassword).trim() !== "madmody") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
       return { success: false, message: "غير مصرح بالدخول." };
     }
     return { success: true, videos: getTable("Videos") };
     
   } else if (action === "adminAddVideo") {
-    if (String(params.adminPassword).trim() !== "madmody") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
       return { success: false, message: "غير مصرح بالعملية." };
     }
-    
     const videos = getTable("Videos");
     const url = String(params.url).trim();
     const title = String(params.title).trim();
@@ -569,7 +413,7 @@ function handleDemoRequest(params) {
     return { success: true, message: "تم إضافة الفيديو للمستوى بنجاح." };
     
   } else if (action === "adminDeleteVideo") {
-    if (String(params.adminPassword).trim() !== "madmody") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
       return { success: false, message: "غير مصرح بالعملية." };
     }
     const videos = getTable("Videos");
@@ -583,13 +427,13 @@ function handleDemoRequest(params) {
     return { success: false, message: "لم يتم العثور على الفيديو." };
     
   } else if (action === "adminGetNotifications") {
-    if (String(params.adminPassword).trim() !== "madmody") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
       return { success: false, message: "غير مصرح بالدخول." };
     }
     return { success: true, notifications: getTable("Notifications") };
     
   } else if (action === "adminGetPromotions") {
-    if (String(params.adminPassword).trim() !== "madmody") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
       return { success: false, message: "غير مصرح بالدخول." };
     }
     const promotions = getTable("Promotions");
@@ -603,7 +447,7 @@ function handleDemoRequest(params) {
     return { success: true, promotions: enhanced };
     
   } else if (action === "adminApprovePromotion") {
-    if (String(params.adminPassword).trim() !== "madmody") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
       return { success: false, message: "غير مصرح بالعملية." };
     }
     const email = String(params.email).trim().toLowerCase();
@@ -626,6 +470,97 @@ function handleDemoRequest(params) {
       return { success: true, message: "تمت الموافقة على الترقية وإصدار الشهادة بنجاح." };
     }
     return { success: false, message: "فشل تحديث مستوى المتدرب." };
+
+  } else if (action === "adminGetAdmins") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
+      return { success: false, message: "غير مصرح بالدخول." };
+    }
+    return { success: true, admins: getTable("Admins") };
+
+  } else if (action === "adminAddAdmin") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
+      return { success: false, message: "غير مصرح بالعملية." };
+    }
+    const admins = getTable("Admins");
+    admins.push({
+      Timestamp: new Date().toISOString(),
+      Username: params.username.trim(),
+      Password: params.password.trim(),
+      Role: params.role || "Admin"
+    });
+    saveTable("Admins", admins);
+    return { success: true, message: "تم إضافة المدير الجديد بنجاح." };
+
+  } else if (action === "adminGetQuestions") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
+      return { success: false, message: "غير مصرح بالدخول." };
+    }
+    return { success: true, questions: getTable("Questions") };
+
+  } else if (action === "adminAddQuestion") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
+      return { success: false, message: "غير مصرح بالعملية." };
+    }
+    const questions = getTable("Questions");
+    questions.push({
+      Timestamp: new Date().toISOString(),
+      Level: params.level,
+      QuestionAr: params.questionAr,
+      QuestionEn: params.questionEn,
+      Option1Ar: params.option1Ar,
+      Option1En: params.option1En,
+      Option2Ar: params.option2Ar,
+      Option2En: params.option2En,
+      Option3Ar: params.option3Ar,
+      Option3En: params.option3En,
+      CorrectIndex: params.correctIndex
+    });
+    saveTable("Questions", questions);
+    return { success: true, message: "تم إضافة السؤال بنجاح للمستوى." };
+
+  } else if (action === "adminDeleteQuestion") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
+      return { success: false, message: "غير مصرح بالعملية." };
+    }
+    const questions = getTable("Questions");
+    const index = parseInt(params.index);
+    if (index >= 0 && index < questions.length) {
+      questions.splice(index, 1);
+      saveTable("Questions", questions);
+      return { success: true, message: "تم حذف السؤال بنجاح." };
+    }
+    return { success: false, message: "فشل حذف السؤال." };
+
+  } else if (action === "adminEditTrainee") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
+      return { success: false, message: "غير مصرح بالعملية." };
+    }
+    const trainees = getTable("Trainees");
+    const phone = String(params.phone).trim();
+    const tIndex = trainees.findIndex(x => String(x.Phone).trim() === phone);
+    if (tIndex !== -1) {
+      trainees[tIndex].Name = params.name;
+      trainees[tIndex].Email = params.email;
+      trainees[tIndex].CurrentLevel = params.level;
+      trainees[tIndex].TrainingBranch = params.branch;
+      saveTable("Trainees", trainees);
+      return { success: true, message: "تم تعديل بيانات المتدرب بنجاح." };
+    }
+    return { success: false, message: "لم يتم العثور على المتدرب." };
+
+  } else if (action === "adminToggleBlockTrainee") {
+    if (!verifyLocalAdmin(params.adminPassword)) {
+      return { success: false, message: "غير مصرح بالعملية." };
+    }
+    const trainees = getTable("Trainees");
+    const phone = String(params.phone).trim();
+    const tIndex = trainees.findIndex(x => String(x.Phone).trim() === phone);
+    if (tIndex !== -1) {
+      trainees[tIndex].Status = params.state;
+      saveTable("Trainees", trainees);
+      return { success: true, message: params.state === "blocked" ? "تم حظر الحساب بنجاح." : "تم تنشيط الحساب بنجاح." };
+    }
+    return { success: false, message: "لم يتم العثور على المتدرب." };
   }
 
   return { success: false, message: "Unknown action" };

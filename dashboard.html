@@ -35,8 +35,8 @@
   <header class="app-container" style="max-width: 1200px; padding: 20px 20px 0;">
     <div class="app-header">
       <div class="logo-section">
-        <img src="logo.png" alt="شعار صيدليات آل مغاوري" class="logo-img" onerror="this.onerror=null; this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
-        <div class="logo-placeholder" id="logo-fallback" style="display: none;">M</div>
+        <img src="logo.png" alt="شعار صيدليات آل مغاوري" class="logo-img" style="height: 48px; max-height: 48px; width: auto; max-width: 160px; object-fit: contain;" onerror="this.onerror=null; this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
+        <div class="logo-placeholder" id="logo-fallback" style="display: none; width: 48px; height: 48px; border-radius: 50%; background: var(--color-primary); color: #fff; align-items: center; justify-content: center; font-size: 20px; font-weight: bold;">M</div>
         <div>
           <h1 id="header-branch-name">صيدليات آل مغاوري</h1>
           <p data-i18n="header_sub">لوحة تدريب الكوادر الصيدلانية الجديدة</p>
@@ -124,7 +124,7 @@
               <div id="quiz-questions-list">
                 <!-- Injected via JavaScript -->
               </div>
-              <button type="submit" class="btn btn-gold" style="width: 100%; padding: 14px; font-size: 15px;">
+              <button type="submit" class="btn btn-gold" style="width: 100%; padding: 14px; font-size: 15px; cursor: pointer;">
                 <i class="fa-solid fa-paper-plane"></i> <span data-i18n="btn_submit_exam">تسجيل إجابات الامتحان</span>
               </button>
             </form>
@@ -133,7 +133,7 @@
 
         <!-- 3. Promotion Pending State -->
         <div id="promo-pending-viewport" style="display: none; flex: 1; text-align: center; padding: 40px 20px;">
-          <div style="font-size: 60px; color: var(--color-gold); margin-bottom: 20px; animation: goldPulse 2s infinite;"><i class="fa-solid fa-hourglass-half"></i></div>
+          <div style="font-size: 60px; color: var(--color-gold); margin-bottom: 20px;"><i class="fa-solid fa-hourglass-half"></i></div>
           <h2 data-i18n="promo_pending_title">طلب الترقية والشهادة قيد المراجعة ⏳</h2>
           <p style="max-width: 500px; margin: 15px auto;" data-i18n="promo_pending_desc">لقد اجتزت امتحان المرحلة بنجاح وتم إرسال طلبك إلى لوحة المدير العام. نقوم حالياً بمراجعة درجاتك وإصدار الشهادة المعتمدة وتفعيل المستوى التالي لحسابك. يرجى المتابعة قريباً.</p>
           <button class="btn btn-primary" onclick="loadVideos()"><i class="fa-solid fa-rotate"></i> <span data-i18n="btn_refresh_now">تحديث الحالة الآن</span></button>
@@ -182,7 +182,7 @@
         <div class="welcome-overlay" id="player-placeholder">
           <i class="fa-solid fa-graduation-cap"></i>
           <h2 data-i18n="main_title" style="color: var(--color-primary); font-weight: 900;">أكاديمية آل مغاوري لتأهيل الصيادلة الجدد</h2>
-          <div style="max-width: 800px; margin: 20px auto; text-align: justify; line-height: 1.8; font-size: 14px; color: var(--text-muted);" id="dashboard-welcome-desc">
+          <div style="max-width: 800px; margin: 20px auto; text-align: justify; line-height: 1.8; font-size: 14px; color: var(--text-muted)" id="dashboard-welcome-desc">
             <!-- Will be dynamically translated by data-i18n under applySettings using innerHTML to render rich text greeting -->
           </div>
 
@@ -190,7 +190,7 @@
           <div id="exam-unlock-box" style="margin-top: 30px; display: none; text-align: center; border: 2px dashed var(--color-gold); padding: 20px 30px; border-radius: 16px; background: var(--color-gold-glow);">
             <h3 style="color: var(--color-gold);" data-i18n="exam_ready_title">🎉 مبارك! أتممت مشاهدة كافة محاضرات هذا المستوى</h3>
             <p style="font-size: 13px; margin: 8px 0 15px;" data-i18n="exam_ready_desc">أصبحت مؤهلاً الآن لدخول امتحان تقييم المرحلة للحصول على شهادتك المعتمدة وفتح المستوى التدريبي التالي.</p>
-            <button class="btn btn-gold" id="btn-start-exam" style="padding: 12px 25px;"><i class="fa-solid fa-file-signature"></i> <span data-i18n="btn_start_exam">ابدأ امتحان المستوى الآن</span></button>
+            <button class="btn btn-gold" id="btn-start-exam" style="padding: 12px 25px; cursor: pointer;"><i class="fa-solid fa-file-signature"></i> <span data-i18n="btn_start_exam">ابدأ امتحان المستوى الآن</span></button>
           </div>
         </div>
 
@@ -204,7 +204,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3 style="font-size: 18px;"><i class="fa-solid fa-key" style="color: var(--color-primary);"></i> <span data-i18n="btn_chpass">تغيير كلمة المرور</span></h3>
-        <button class="btn btn-secondary" style="padding: 5px 10px;" id="btn-close-chpass"><i class="fa-solid fa-xmark"></i></button>
+        <button class="btn btn-secondary" style="padding: 5px 10px; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;" id="btn-close-chpass"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form id="chpass-form">
         <div class="modal-body">
@@ -222,8 +222,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="btn-cancel-chpass" data-i18n="btn_cancel">إلغاء</button>
-          <button type="submit" class="btn btn-primary" data-i18n="btn_save_pass">حفظ كلمة المرور الجديدة</button>
+          <button type="button" class="btn btn-secondary" id="btn-cancel-chpass" data-i18n="btn_cancel" style="cursor: pointer;">إلغاء</button>
+          <button type="submit" class="btn btn-primary" data-i18n="btn_save_pass" style="cursor: pointer;">حفظ كلمة المرور الجديدة</button>
         </div>
       </form>
     </div>
@@ -266,7 +266,7 @@
 
 <p style="margin-bottom: 10px; font-weight: bold; color: var(--color-gold); border-bottom: 1px dashed var(--border-color); padding-bottom: 5px;"><i class="fa-solid fa-circle-info"></i> التعريف بالنظام الأكاديمي وآلية الارتقاء:</p>
 <ul style="margin-right: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px;">
-  <li><strong>1. خطة المستويات الأربعة</strong>: تم تقسيم التدريب إلى مستويات متتالية تبدأ من المستوى الصفري <strong>Passengers</strong> للتأسيس، يليه مستوى <strong>Starters</strong> لشرح الـ OTC، ثم مستوى <strong>Movers</strong> للبكتيريا والبدائل والتركيبات، وصولاً إلى مستوى <strong>Flyers (ليفل الوحش 👑)</strong> لدبلومات التجميل والسكر والمواد الفعالة.</li>
+  <li><strong>1. خطة المستويات الخمسة</strong>: تم تقسيم التدريب إلى 5 مستويات متتالية تبدأ من المستوى الصفري <strong>Passengers</strong> للتأسيس، يليه مستوى <strong>Starters</strong> لشرح الـ OTC، ثم مستوى <strong>Movers</strong> للبكتيريا والبدائل، ثم مستوى <strong>Flyers</strong> لدبلومات التجميل وتركيبات البشرة، وصولاً إلى مستوى <strong>Beast Level (ليفل الوحش 👑)</strong> لإدارة النواقص والطلبيات ودبلومة السكر المتقدمة.</li>
   <li><strong>2. متطلبات فتح الامتحانات</strong>: يلتزم المتدرب بمشاهدة كافة محاضرات المستوى الحالي بشكل كامل ومستمر لتسجيل حضورهم في قاعدة البيانات.</li>
   <li><strong>3. اختبار المرحلة التلقائي</strong>: بمجرد إتمام المحاضرات، سيفتح لكم النظام اختبار الترقية فوراً. ويتطلب الاجتياز تحقيق نسبة <strong>80% أو أكثر</strong>.</li>
   <li><strong>4. الترقية والشهادات</strong>: بعد اجتياز الاختبار بنجاح، يُرسل طلب ترقيتكم للمدير التنفيذي، وبمجرد الموافقة، يُرفع مستواكم وتصدر لكم <strong>شهادة تخرج معتمدة</strong> برمز تحقق رقمي فريد ومثالية للطباعة الورقية.</li>
@@ -285,7 +285,7 @@
         err_chpass_match: "تأكيد كلمة المرور غير متطابق مع كلمة المرور الجديدة.",
         err_chpass_curr: "كلمة المرور الحالية المدخلة غير صحيحة.",
         toast_chpass_success: "🔒 تم تغيير كلمة المرور بنجاح وتم إرسال إشعار للمطور.",
-        toast_exam_pass: "🎉 ممتاز! لقد اجتزت الامتحان بنجاح بنسبة 100%. اضغط هنا لتقديم طلب الترقية والشهادة.",
+        toast_exam_pass: "🎉 ممتاز! لقد اجتزت الامتحان بنجاح. اضغط هنا لتقديم طلب الترقية والشهادة.",
         toast_exam_fail: "⚠️ للأسف لم تجتز الامتحان. حصلت على {score} من {total}. يجب الحصول على 80% على الأقل. حاول مرة أخرى!",
         cert_view_title: "شهادة المستوى: {level}",
         btn_view_cert: "عرض الشهادة",
@@ -293,6 +293,7 @@
         level_Starters: "Starters (المستوى الأول)",
         level_Movers: "Movers (المستوى الثاني)",
         level_Flyers: "Flyers (المستوى الثالث)",
+        level_Beast: "ليفل الوحش 👑 (المستوى الرابع)",
         exam_submitting: "جاري إرسال طلب الترقية والشهادة...",
         exam_submit_ok: "🎉 تم تسجيل طلب الترقية بنجاح في قاعدة البيانات!"
       },
@@ -322,7 +323,7 @@
 
 <p style="margin-bottom: 10px; font-weight: bold; color: var(--color-gold); border-bottom: 1px dashed var(--border-color); padding-bottom: 5px;"><i class="fa-solid fa-circle-info"></i> Academy System & Qualification Framework:</p>
 <ul style="margin-left: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px;">
-  <li><strong>1. Four-Tier Structure</strong>: The academic roadmap spans four levels starting with Level 0 (<strong>Passengers</strong>) for basics, Level 1 (<strong>Starters</strong>) for OTC diagnosis, Level 2 (<strong>Movers</strong>) for antibiotics & cosmetics, and Level 3 (<strong>Flyers - Beast Level 👑</strong>) for advanced active ingredients & diabetes diploma.</li>
+  <li><strong>1. Five-Level Structure</strong>: The academic roadmap spans 5 levels starting with Level 0 (<strong>Passengers</strong>) for basics, Level 1 (<strong>Starters</strong>) for OTC diagnosis, Level 2 (<strong>Movers</strong>) for antibiotics & class alternatives, Level 3 (<strong>Flyers</strong>) for cosmetics formulations, and Level 4 (<strong>Beast Level 👑</strong>) for advanced shortages management & diabetes diploma.</li>
   <li><strong>2. Lecture Completion</strong>: Trainees must watch all videos in their current level fully to log attendance in the system database.</li>
   <li><strong>3. Dynamic Level Exam</strong>: Upon finishing all videos, a stage exam will automatically unlock. A passing score of <strong>80% or higher</strong> is mandatory.</li>
   <li><strong>4. Certificate & Promotion</strong>: Once passed, your promotion request is sent to the CEO. Upon approval, you advance to the next level and unlock a <strong>verified graduation certificate</strong> with a unique verification code, ready for print.</li>
@@ -349,6 +350,7 @@
         level_Starters: "Starters (Level 1)",
         level_Movers: "Movers (Level 2)",
         level_Flyers: "Flyers (Level 3)",
+        level_Beast: "Beast Level 👑 (Level 4)",
         exam_submitting: "Submitting promotion request...",
         exam_submit_ok: "🎉 Promotion request submitted successfully to DB!"
       }
@@ -376,23 +378,24 @@
     let videosData = [];
     let watchedVideos = [];
     let completedLevelsList = [];
+    let examQuestions = []; // Global questions loaded from spreadsheet
     let currentVideoId = null;
     let ytPlayer = null;
-     let currentLang = localStorage.getItem("app_lang") || "ar";
-     let currentTheme = localStorage.getItem("app_theme") || "sand"; // sand, green, dark
+    let currentLang = localStorage.getItem("app_lang") || "ar";
+    let currentTheme = localStorage.getItem("app_theme") || "sand"; // sand, green, dark
 
-     function applySettings() {
-       // Theme cycling
-       document.body.classList.remove("green-theme", "dark-theme");
-       if (currentTheme === "green") {
-         document.body.classList.add("green-theme");
-         document.getElementById("btn-theme").innerHTML = `<i class="fa-solid fa-leaf" style="color: var(--color-primary);"></i>`;
-       } else if (currentTheme === "dark") {
-         document.body.classList.add("dark-theme");
-         document.getElementById("btn-theme").innerHTML = `<i class="fa-solid fa-sun" style="color: var(--color-gold);"></i>`;
-       } else { // sand
-         document.getElementById("btn-theme").innerHTML = `<i class="fa-solid fa-moon"></i>`;
-       }
+    function applySettings() {
+      // Theme cycling
+      document.body.classList.remove("green-theme", "dark-theme");
+      if (currentTheme === "green") {
+        document.body.classList.add("green-theme");
+        document.getElementById("btn-theme").innerHTML = `<i class="fa-solid fa-leaf" style="color: var(--color-primary);"></i>`;
+      } else if (currentTheme === "dark") {
+        document.body.classList.add("dark-theme");
+        document.getElementById("btn-theme").innerHTML = `<i class="fa-solid fa-sun" style="color: var(--color-gold);"></i>`;
+      } else { // sand
+        document.getElementById("btn-theme").innerHTML = `<i class="fa-solid fa-moon"></i>`;
+      }
 
       // Lang direction
       document.documentElement.lang = currentLang;
@@ -467,6 +470,7 @@
           traineeLevel = response.currentLevel;
           sessionStorage.setItem("trainee_level", traineeLevel);
           completedLevelsList = response.completedLevels || [];
+          examQuestions = response.questions || []; // Save dynamically loaded questions from Google Sheets
           
           applySettings();
 
@@ -489,8 +493,8 @@
     function checkExamEligibility() {
       const examBox = document.getElementById("exam-unlock-box");
       
-      // If trainee level is already Flyers and completed, no higher level to go (flyers is final beast level!)
-      if (traineeLevel === "Flyers" && completedLevelsList.includes("Flyers")) {
+      // If trainee level is already Beast and completed, no higher level to go
+      if (traineeLevel === "Beast" && completedLevelsList.includes("Beast")) {
         examBox.style.display = "none";
         return;
       }
@@ -507,7 +511,7 @@
       container.innerHTML = "";
 
       if (videosData.length === 0) {
-        container.innerHTML = `<li style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px;" data-i18n="loading_lectures">لا توجد محاضرات في هذا المستوى حالياً.</li>`;
+        container.innerHTML = `<li style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px;">لا توجد محاضرات في هذا المستوى حالياً.</li>`;
         return;
       }
 
@@ -650,8 +654,13 @@
       const container = document.getElementById("quiz-questions-list");
       container.innerHTML = "";
       
-      const questions = EXAM_QUESTIONS[traineeLevel] || [];
+      const questions = examQuestions && examQuestions.length > 0 ? examQuestions : [];
       
+      if (questions.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 14px; padding: 25px;">لا توجد أسئلة متوفرة لهذا الامتحان حالياً. يرجى التواصل مع المشرف.</div>`;
+        return;
+      }
+
       questions.forEach((q, idx) => {
         const questionText = currentLang === "ar" ? q.q : q.q_en;
         const optionsList = currentLang === "ar" ? q.options : q.options_en;
@@ -680,9 +689,11 @@
     // Quiz form submit handler
     document.getElementById("quiz-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const questions = EXAM_QUESTIONS[traineeLevel] || [];
+      const questions = examQuestions && examQuestions.length > 0 ? examQuestions : [];
+      
+      if (questions.length === 0) return;
+      
       let score = 0;
-
       questions.forEach((q, idx) => {
         const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
         if (selected && parseInt(selected.value) === q.correct) {
@@ -706,7 +717,8 @@
         "Passengers": "Starters",
         "Starters": "Movers",
         "Movers": "Flyers",
-        "Flyers": "Flyers"
+        "Flyers": "Beast",
+        "Beast": "Beast"
       };
 
       const toLevel = nextLevels[traineeLevel];
