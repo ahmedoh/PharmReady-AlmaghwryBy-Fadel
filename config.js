@@ -8,7 +8,7 @@
  *    using browser LocalStorage, allowing you to test everything immediately without Google Sheets!
  */
 
-const API_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const API_URL = "https://script.google.com/macros/s/AKfycbxBtQhRO0HYZM8udwsGxHOSB-_LkpPFknu0xTiU2TI8yhc4hVkb7K2RgcqF7QlRYtCf/exec";
 
 // Check if we are running in Demo Mode
 const isDemoMode = !API_URL || API_URL.includes("YOUR_GOOGLE_APPS_SCRIPT");
