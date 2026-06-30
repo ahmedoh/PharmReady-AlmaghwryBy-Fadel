@@ -8,7 +8,7 @@
  *    using browser LocalStorage, allowing you to test everything immediately without Google Sheets!
  */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzbwRT49RMxOnHQ0eax27CQRajOgOMQvgvVX3spugLyBaNnJxB9sk_kzjzOSAsNQ6__/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyufkklVBk7myFQWJltmajwXzDSRxDR8NtFs73uA7_7giULU2stN9ce3gonyAKlu7ox/exec";
 
 // Check if we are running in Demo Mode (checks if placeholder is still present)
 const isDemoMode = !API_URL || API_URL.includes("YOUR_GOOGLE_APPS_SCRIPT");
