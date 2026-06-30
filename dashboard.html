@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة المتدرب | PharmReady-AlmaghwryBy-Fadel</title>
+  <!-- Google Fonts: Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .welcome-overlay {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 400px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+    .welcome-overlay i {
+      font-size: 60px;
+      margin-bottom: 20px;
+      color: var(--color-primary-glow);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-container" style="max-width: 1200px; padding: 20px 20px 0;">
+    <div class="app-header">
+      <div class="logo-section">
+        <img src="logo.png" alt="شعار صيدليات آل مغاوري" class="logo-img" onerror="this.onerror=null; this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
+        <div class="logo-placeholder" id="logo-fallback" style="display: none;">M</div>
+        <div>
+          <h1 id="header-branch-name">صيدليات آل مغاوري</h1>
+          <p data-i18n="header_sub">لوحة تدريب الكوادر الصيدلانية الجديدة</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="theme-switch-btn" id="btn-theme" title="تبديل المظهر / Toggle Theme"><i class="fa-solid fa-moon"></i></button>
+        <button class="lang-switch-btn" id="btn-lang" title="Toggle Language / تبديل اللغة"><i class="fa-solid fa-globe"></i></button>
+        <button class="btn btn-secondary" id="btn-show-chpass"><i class="fa-solid fa-key"></i> <span data-i18n="btn_chpass">تغيير كلمة المرور</span></button>
+        <button class="btn btn-danger" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="btn_logout">تسجيل الخروج</span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="app-container" style="flex: 1; padding-top: 0;">
+    <div class="dashboard-grid">
+      
+      <!-- Sidebar: Video Playlist and Level Progress -->
+      <div class="card sidebar-card">
+        <div>
+          <h3 style="font-size: 15px; margin-bottom: 5px;" data-i18n="welcome_dr">مرحباً دكتور</h3>
+          <h2 style="font-size: 18px; color: var(--color-primary);" id="sidebar-trainee-name">...</h2>
+          <p style="font-size: 11px; margin-top: 5px;" id="sidebar-trainee-email">...</p>
+          <div style="margin-top: 15px; display: flex; align-items: center; gap: 8px;">
+            <strong style="font-size: 12px;" data-i18n="curr_level_lbl">المستوى التدريبي:</strong>
+            <span class="status-badge" id="trainee-level-badge">...</span>
+          </div>
+        </div>
+        
+        <div style="margin-top: 10px;">
+          <h3 class="card-title" style="font-size: 15px; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+            <i class="fa-solid fa-play"></i> <span data-i18n="lectures_list_title">قائمة المحاضرات التدريبية</span>
+          </h3>
+          <ul class="video-list" id="playlist-container">
+            <li style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px;" data-i18n="loading_lectures">جاري تحميل الفيديوهات...</li>
+          </ul>
+        </div>
+
+        <!-- Certificates list section -->
+        <div id="certificates-section" style="margin-top: 10px; display: none;">
+          <h3 class="card-title" style="font-size: 15px; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; color: var(--color-gold);">
+            <i class="fa-solid fa-award"></i> <span data-i18n="cert_list_title">شهاداتك المعتمدة</span>
+          </h3>
+          <ul class="video-list" id="certificates-container">
+            <!-- Dynamically populated -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- Main Panel: Video Player, Quiz & Certificates Viewport -->
+      <div class="card" id="main-panel" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between; min-height: 450px;">
+        
+        <!-- 1. Video Player Viewport -->
+        <div id="player-viewport" style="display: none; flex: 1;">
+          <h3 id="playing-video-title" style="font-size: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: var(--text-main);">
+            <i class="fa-solid fa-circle-play" style="color: var(--color-primary);"></i> Name of Video
+          </h3>
+
+          <div class="video-player-container" id="video-wrapper">
+            <!-- Anti-recording moving Watermark overlay -->
+            <div class="security-watermark" id="watermark-overlay">
+              <span id="watermark-name">Trainee Name</span>
+              <span id="watermark-email">email@maghawry.com</span>
+              <span id="watermark-phone">010XXXXXXXX</span>
+              <span>PharmReady-Almaghwry</span>
+            </div>
+            <div id="yt-player-placeholder"></div>
+          </div>
+
+          <div class="check-box" style="margin-top: 15px; text-align: inherit; background: rgba(16,185,129,0.02);">
+            <p style="font-size: 12px;" data-i18n="copyright_warning">
+              هذا الفيديو محمي بموجب حقوق الطبع والنشر لصيدليات آل مغاوري. يتم توليد علامات مائية عشوائية باسمك وبيانات حسابك لمنع التسجيل أو النشر غير المصرح به. إتمام مشاهدة الفيديو كاملاً يسجل تلقائياً في ملف تقدمك الدراسي.
+            </p>
+          </div>
+        </div>
+
+        <!-- 2. Exam/Quiz Viewport -->
+        <div id="exam-viewport" style="display: none; flex: 1;">
+          <h2 style="font-size: 22px; color: var(--color-gold); margin-bottom: 10px;"><i class="fa-solid fa-file-signature"></i> <span data-i18n="exam_title">امتحان اجتياز وتخطي المرحلة</span></h2>
+          <p style="font-size: 13px; margin-bottom: 20px;" data-i18n="exam_desc">يرجى الإجابة على الأسئلة التالية بدقة. يشترط الحصول على نسبة نجاح 80% أو أكثر لتتمكن من تقديم طلب الترقية للمستوى التالي والحصول على شهادتك.</p>
+          
+          <div class="exam-container">
+            <form id="quiz-form">
+              <div id="quiz-questions-list">
+                <!-- Injected via JavaScript -->
+              </div>
+              <button type="submit" class="btn btn-gold" style="width: 100%; padding: 14px; font-size: 15px;">
+                <i class="fa-solid fa-paper-plane"></i> <span data-i18n="btn_submit_exam">تسجيل إجابات الامتحان</span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- 3. Promotion Pending State -->
+        <div id="promo-pending-viewport" style="display: none; flex: 1; text-align: center; padding: 40px 20px;">
+          <div style="font-size: 60px; color: var(--color-gold); margin-bottom: 20px; animation: goldPulse 2s infinite;"><i class="fa-solid fa-hourglass-half"></i></div>
+          <h2 data-i18n="promo_pending_title">طلب الترقية والشهادة قيد المراجعة ⏳</h2>
+          <p style="max-width: 500px; margin: 15px auto;" data-i18n="promo_pending_desc">لقد اجتزت امتحان المرحلة بنجاح وتم إرسال طلبك إلى لوحة المدير العام. نقوم حالياً بمراجعة درجاتك وإصدار الشهادة المعتمدة وتفعيل المستوى التالي لحسابك. يرجى المتابعة قريباً.</p>
+          <button class="btn btn-primary" onclick="loadVideos()"><i class="fa-solid fa-rotate"></i> <span data-i18n="btn_refresh_now">تحديث الحالة الآن</span></button>
+        </div>
+
+        <!-- 4. Certificate Viewport -->
+        <div id="certificate-viewport" style="display: none; flex: 1; text-align: center;">
+          <div class="certificate-wrapper" id="print-area">
+            <div class="certificate-watermark">MAGHAWRY</div>
+            <div class="certificate-content">
+              <div class="cert-header">
+                <h2>أكاديمية صيدليات آل مغاوري</h2>
+                <p>PharmReady Trainees Academy</p>
+              </div>
+              <div class="cert-title">شهادة اجتياز وتفوق</div>
+              <div class="cert-body">
+                تشهد إدارة التدريب والتعليم بصيدليات آل مغاوري بأن الدكتور / الدكتورة:
+                <br><strong><span id="cert-trainee-name">...</span></strong><br>
+                قد اجتاز بنجاح وتفوق المتطلبات الأكاديمية والعملية المقررة لمستوى:
+                <br><strong><span id="cert-level-name">...</span></strong><br>
+                وتم منحه هذه الشهادة تقديراً لجهوده والتزامه بالمعايير المهنية.
+              </div>
+              <div class="cert-footer">
+                <div class="cert-sig">
+                  مدير الأكاديمية
+                  <div class="cert-sig-name">د. أحمد فاضل</div>
+                </div>
+                <div class="cert-sig">
+                  المدير التنفيذي
+                  <div class="cert-sig-name">د. أحمد مغاوري</div>
+                </div>
+              </div>
+              <div class="cert-code" style="margin-top: 15px;">
+                Certificate Code: <span id="cert-hash-code">...</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: center;">
+            <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> <span data-i18n="btn_print_cert">طباعة الشهادة أو حفظ كـ PDF</span></button>
+            <button class="btn btn-secondary" onclick="resetViewport()"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="btn_back_dashboard">العودة للرئيسية</span></button>
+          </div>
+        </div>
+
+        <!-- 5. Default/Placeholder Viewport -->
+        <div class="welcome-overlay" id="player-placeholder">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <h2 data-i18n="main_title" style="color: var(--color-primary); font-weight: 900;">أكاديمية آل مغاوري لتأهيل الصيادلة الجدد</h2>
+          <div style="max-width: 800px; margin: 20px auto; text-align: justify; line-height: 1.8; font-size: 14px; color: var(--text-muted);" id="dashboard-welcome-desc">
+            <!-- Will be dynamically translated by data-i18n under applySettings using innerHTML to render rich text greeting -->
+          </div>
+
+          <!-- Action button to unlock exam (if watched all) -->
+          <div id="exam-unlock-box" style="margin-top: 30px; display: none; text-align: center; border: 2px dashed var(--color-gold); padding: 20px 30px; border-radius: 16px; background: var(--color-gold-glow);">
+            <h3 style="color: var(--color-gold);" data-i18n="exam_ready_title">🎉 مبارك! أتممت مشاهدة كافة محاضرات هذا المستوى</h3>
+            <p style="font-size: 13px; margin: 8px 0 15px;" data-i18n="exam_ready_desc">أصبحت مؤهلاً الآن لدخول امتحان تقييم المرحلة للحصول على شهادتك المعتمدة وفتح المستوى التدريبي التالي.</p>
+            <button class="btn btn-gold" id="btn-start-exam" style="padding: 12px 25px;"><i class="fa-solid fa-file-signature"></i> <span data-i18n="btn_start_exam">ابدأ امتحان المستوى الآن</span></button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Change Password Modal -->
+  <div class="modal-overlay" id="chpass-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-size: 18px;"><i class="fa-solid fa-key" style="color: var(--color-primary);"></i> <span data-i18n="btn_chpass">تغيير كلمة المرور</span></h3>
+        <button class="btn btn-secondary" style="padding: 5px 10px;" id="btn-close-chpass"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="chpass-form">
+        <div class="modal-body">
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label for="old-pass" data-i18n="lbl_curr_pass">كلمة المرور الحالية <span class="required">*</span></label>
+            <input type="password" id="old-pass" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label for="new-pass" data-i18n="lbl_new_pass">كلمة المرور الجديدة <span class="required">*</span></label>
+            <input type="password" id="new-pass" required minlength="8">
+          </div>
+          <div class="form-group">
+            <label for="confirm-pass" data-i18n="lbl_confirm_pass">تأكيد كلمة المرور الجديدة <span class="required">*</span></label>
+            <input type="password" id="confirm-pass" required minlength="8">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-chpass" data-i18n="btn_cancel">إلغاء</button>
+          <button type="submit" class="btn btn-primary" data-i18n="btn_save_pass">حفظ كلمة المرور الجديدة</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <p data-i18n="footer_text">برمجة وتطوير د. أحمد فاضل © 2026 | جميع الحقوق محفوظة لصيدليات آل مغاوري</p>
+    <p style="font-size: 10px; margin-top: 5px; color: rgba(128,128,128,0.4)">Support: 01107118948</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    // Translate data
+    const langData = {
+      ar: {
+        header_sub: "لوحة تدريب الكوادر الصيدلانية الجديدة",
+        btn_chpass: "تغيير كلمة المرور",
+        btn_logout: "تسجيل الخروج",
+        welcome_dr: "مرحباً دكتور",
+        curr_level_lbl: "المستوى التدريبي:",
+        lectures_list_title: "قائمة المحاضرات التدريبية",
+        loading_lectures: "جاري تحميل الفيديوهات...",
+        cert_list_title: "شهاداتك المعتمدة",
+        playing_video_title: "المحاضرة المعروضة",
+        copyright_warning: "هذا الفيديو محمي بموجب حقوق الطبع والنشر لصيدليات آل مغاوري. يتم توليد علامات مائية عشوائية باسمك وبيانات حسابك لمنع التسجيل أو النشر غير المصرح به. إتمام مشاهدة الفيديو كاملاً يسجل تلقائياً في ملف تقدمك الدراسي.",
+        exam_title: "امتحان اجتياز وتخطي المرحلة",
+        exam_desc: "يرجى الإجابة على الأسئلة التالية بدقة. يشترط الحصول على نسبة نجاح 80% أو أكثر لتتمكن من تقديم طلب الترقية للمستوى التالي والحصول على شهادتك.",
+        btn_submit_exam: "تسجيل إجابات الامتحان",
+        promo_pending_title: "طلب الترقية والشهادة قيد المراجعة ⏳",
+        promo_pending_desc: "لقد اجتزت امتحان المرحلة بنجاح وتم إرسال طلبك إلى لوحة المدير العام. نقوم حالياً بمراجعة درجاتك وإصدار الشهادة المعتمدة وتفعيل المستوى التالي لحسابك. يرجى المتابعة قريباً.",
+        btn_refresh_now: "تحديث الحالة الآن",
+        btn_print_cert: "طباعة الشهادة أو حفظ كـ PDF",
+        btn_back_dashboard: "العودة للرئيسية",
+        main_title: "أكاديمية آل مغاوري لتأهيل الصيادلة الجدد",
+        main_subtitle: `<div style="text-align: center; font-size: 15px; margin-bottom: 20px; font-weight: bold; color: var(--color-primary);">مرحباً بكم زملاء المهنة الكرام في رحاب أكاديمية آل مغاوري للتأهيل الميداني 🎓</div>
+<p style="margin-bottom: 12px;"><strong>زميلاتي وزملائي الكرام من الصيادلة الجدد،</strong></p>
+<p style="margin-bottom: 15px; text-indent: 15px;">السلام عليكم ورحمة الله وبركاته، إن مهنة الصيدلة ليست مجرد صرفٍ للأدوية، بل هي أمانة علمية ورسالة إنسانية نبيلة تسهم في تخفيف آلام البشر وحفظ الأرواح. يسعدني ويشرفني كمدرب ومشرف أكاديمي لكم أن أصحبكم خطوة بخطوة في هذه الرحلة التدريبية المتكاملة لننطلق سوياً من مرحلة الأساسيات حتى نبلغ معاً ليفل الاحتراف والتميز الفعلي في سوق العمل الصيدلي.</p>
+
+<p style="margin-bottom: 10px; font-weight: bold; color: var(--color-gold); border-bottom: 1px dashed var(--border-color); padding-bottom: 5px;"><i class="fa-solid fa-circle-info"></i> التعريف بالنظام الأكاديمي وآلية الارتقاء:</p>
+<ul style="margin-right: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px;">
+  <li><strong>1. خطة المستويات الأربعة</strong>: تم تقسيم التدريب إلى مستويات متتالية تبدأ من المستوى الصفري <strong>Passengers</strong> للتأسيس، يليه مستوى <strong>Starters</strong> لشرح الـ OTC، ثم مستوى <strong>Movers</strong> للبكتيريا والبدائل والتركيبات، وصولاً إلى مستوى <strong>Flyers (ليفل الوحش 👑)</strong> لدبلومات التجميل والسكر والمواد الفعالة.</li>
+  <li><strong>2. متطلبات فتح الامتحانات</strong>: يلتزم المتدرب بمشاهدة كافة محاضرات المستوى الحالي بشكل كامل ومستمر لتسجيل حضورهم في قاعدة البيانات.</li>
+  <li><strong>3. اختبار المرحلة التلقائي</strong>: بمجرد إتمام المحاضرات، سيفتح لكم النظام اختبار الترقية فوراً. ويتطلب الاجتياز تحقيق نسبة <strong>80% أو أكثر</strong>.</li>
+  <li><strong>4. الترقية والشهادات</strong>: بعد اجتياز الاختبار بنجاح، يُرسل طلب ترقيتكم للمدير التنفيذي، وبمجرد الموافقة، يُرفع مستواكم وتصدر لكم <strong>شهادة تخرج معتمدة</strong> برمز تحقق رقمي فريد ومثالية للطباعة الورقية.</li>
+</ul>
+<p style="text-align: center; font-weight: 600; margin-top: 15px; color: var(--color-primary);">"ابدأوا مسيرتكم المباركة الآن باختيار المحاضرة الأولى من القائمة الجانبية. نتمنى لكم التوفيق والسداد!"</p>
+<p style="text-align: left; font-size: 12px; margin-top: 10px; color: var(--text-muted); font-weight: bold;">أخوكم ومدربكم الأكاديمي: د. أحمد فاضل / إدارة صيدليات آل مغاوري</p>`,
+        exam_ready_title: "🎉 مبارك! أتممت مشاهدة كافة محاضرات هذا المستوى",
+        exam_ready_desc: "أصبحت مؤهلاً الآن لدخول امتحان تقييم المرحلة للحصول على شهادتك المعتمدة وفتح المستوى التدريبي التالي.",
+        btn_start_exam: "ابدأ امتحان المستوى الآن",
+        lbl_curr_pass: "كلمة المرور الحالية",
+        lbl_new_pass: "كلمة المرور الجديدة",
+        lbl_confirm_pass: "تأكيد كلمة المرور الجديدة",
+        btn_cancel: "إلغاء",
+        btn_save_pass: "حفظ كلمة المرور الجديدة",
+        footer_text: "برمجة وتطوير د. أحمد فاضل © 2026 | جميع الحقوق محفوظة لصيدليات آل مغاوري",
+        err_chpass_match: "تأكيد كلمة المرور غير متطابق مع كلمة المرور الجديدة.",
+        err_chpass_curr: "كلمة المرور الحالية المدخلة غير صحيحة.",
+        toast_chpass_success: "🔒 تم تغيير كلمة المرور بنجاح وتم إرسال إشعار للمطور.",
+        toast_exam_pass: "🎉 ممتاز! لقد اجتزت الامتحان بنجاح بنسبة 100%. اضغط هنا لتقديم طلب الترقية والشهادة.",
+        toast_exam_fail: "⚠️ للأسف لم تجتز الامتحان. حصلت على {score} من {total}. يجب الحصول على 80% على الأقل. حاول مرة أخرى!",
+        cert_view_title: "شهادة المستوى: {level}",
+        btn_view_cert: "عرض الشهادة",
+        level_Passengers: "Passengers (المستوى الصفري)",
+        level_Starters: "Starters (المستوى الأول)",
+        level_Movers: "Movers (المستوى الثاني)",
+        level_Flyers: "Flyers (المستوى الثالث)",
+        exam_submitting: "جاري إرسال طلب الترقية والشهادة...",
+        exam_submit_ok: "🎉 تم تسجيل طلب الترقية بنجاح في قاعدة البيانات!"
+      },
+      en: {
+        header_sub: "Trainees Digital Academy & LMS Panel",
+        btn_chpass: "Change Password",
+        btn_logout: "Sign Out",
+        welcome_dr: "Welcome, Dr.",
+        curr_level_lbl: "Academic Level:",
+        lectures_list_title: "Training Video Lectures",
+        loading_lectures: "Loading videos database...",
+        cert_list_title: "Your Earned Certificates",
+        playing_video_title: "Playing Lecture",
+        copyright_warning: "This video is copyright protected by El-Maghawry Pharmacies Group. Watermarks containing your account details are overlaid dynamically to prevent unauthorized recording. Finishing this video records progress automatically.",
+        exam_title: "Level Promotion & Qualification Exam",
+        exam_desc: "Please answer the questions carefully. Scoring 80% or higher is required to apply for promotion to the next level and obtain your certificate.",
+        btn_submit_exam: "Submit Exam Answers",
+        promo_pending_title: "Promotion Request Under Review ⏳",
+        promo_pending_desc: "You have passed the exam! Your request has been sent to the CEO panel. We are reviewing your results and issuing your certified document. Please check back shortly.",
+        btn_refresh_now: "Refresh Status Now",
+        btn_print_cert: "Print Certificate or Save as PDF",
+        btn_back_dashboard: "Back to Home",
+        main_title: "El-Maghawry Pharmacists Training Academy",
+        main_subtitle: `<div style="text-align: center; font-size: 15px; margin-bottom: 20px; font-weight: bold; color: var(--color-primary);">Welcome, Dear Colleagues, to El-Maghawry Training Academy 🎓</div>
+<p style="margin-bottom: 12px;"><strong>Dear New Pharmacists & Colleagues,</strong></p>
+<p style="margin-bottom: 15px; text-indent: 15px;">Peace and blessings be upon you. Pharmacy is not merely dispensing drugs; it is a noble medical mission and a scientific trust focused on preserving lives and easing pain. As your supervisor and trainer, I am honored to guide you step-by-step through this comprehensive LMS platform, transforming basic knowledge into outstanding field-readiness for the job market.</p>
+
+<p style="margin-bottom: 10px; font-weight: bold; color: var(--color-gold); border-bottom: 1px dashed var(--border-color); padding-bottom: 5px;"><i class="fa-solid fa-circle-info"></i> Academy System & Qualification Framework:</p>
+<ul style="margin-left: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px;">
+  <li><strong>1. Four-Tier Structure</strong>: The academic roadmap spans four levels starting with Level 0 (<strong>Passengers</strong>) for basics, Level 1 (<strong>Starters</strong>) for OTC diagnosis, Level 2 (<strong>Movers</strong>) for antibiotics & cosmetics, and Level 3 (<strong>Flyers - Beast Level 👑</strong>) for advanced active ingredients & diabetes diploma.</li>
+  <li><strong>2. Lecture Completion</strong>: Trainees must watch all videos in their current level fully to log attendance in the system database.</li>
+  <li><strong>3. Dynamic Level Exam</strong>: Upon finishing all videos, a stage exam will automatically unlock. A passing score of <strong>80% or higher</strong> is mandatory.</li>
+  <li><strong>4. Certificate & Promotion</strong>: Once passed, your promotion request is sent to the CEO. Upon approval, you advance to the next level and unlock a <strong>verified graduation certificate</strong> with a unique verification code, ready for print.</li>
+</ul>
+<p style="text-align: center; font-weight: 600; margin-top: 15px; color: var(--color-primary);">"Start your path of excellence now by selecting the first video lecture from the sidebar. We wish you ultimate success!"</p>
+<p style="text-align: right; font-size: 12px; margin-top: 10px; color: var(--text-muted); font-weight: bold;">Your Academic Trainer: Dr. Ahmed Fadel / El-Maghawry Pharmacies Group</p>`,
+        exam_ready_title: "🎉 Congratulations! You watched all lectures for this level",
+        exam_ready_desc: "You are now qualified to take the level assessment exam to earn your certified document and unlock the next level.",
+        btn_start_exam: "Start Level Exam Now",
+        lbl_curr_pass: "Current Password",
+        lbl_new_pass: "New Password",
+        lbl_confirm_pass: "Confirm New Password",
+        btn_cancel: "Cancel",
+        btn_save_pass: "Save New Password",
+        footer_text: "Engineered by Dr. Ahmed Fadel © 2026 | El-Maghawry Pharmacies Group",
+        err_chpass_match: "Passwords do not match.",
+        err_chpass_curr: "Incorrect current password.",
+        toast_chpass_success: "🔒 Password updated successfully and developer notified.",
+        toast_exam_pass: "🎉 Excellent! You passed the exam. Click here to submit promotion request.",
+        toast_exam_fail: "⚠️ You did not pass. You scored {score}/{total}. 80% score required. Try again!",
+        cert_view_title: "Certificate: {level}",
+        btn_view_cert: "View Certificate",
+        level_Passengers: "Passengers (Level 0)",
+        level_Starters: "Starters (Level 1)",
+        level_Movers: "Movers (Level 2)",
+        level_Flyers: "Flyers (Level 3)",
+        exam_submitting: "Submitting promotion request...",
+        exam_submit_ok: "🎉 Promotion request submitted successfully to DB!"
+      }
+    };
+
+    // Authenticate
+    const traineeLoggedIn = sessionStorage.getItem("trainee_logged_in");
+    const traineeEmail = sessionStorage.getItem("trainee_email");
+    const traineePassword = sessionStorage.getItem("trainee_password");
+    const traineeName = sessionStorage.getItem("trainee_name");
+    const traineeBranch = sessionStorage.getItem("trainee_branch");
+
+    if (!traineeLoggedIn || !traineeEmail || !traineePassword) {
+      window.location.href = "index.html";
+    }
+
+    let traineeLevel = sessionStorage.getItem("trainee_level") || "Passengers";
+
+    document.getElementById("sidebar-trainee-name").textContent = traineeName;
+    document.getElementById("sidebar-trainee-email").textContent = traineeEmail;
+    document.getElementById("watermark-name").textContent = traineeName;
+    document.getElementById("watermark-email").textContent = traineeEmail;
+    document.getElementById("watermark-phone").textContent = sessionStorage.getItem("trainee_phone") || traineeBranch;
+
+    let videosData = [];
+    let watchedVideos = [];
+    let completedLevelsList = [];
+    let currentVideoId = null;
+    let ytPlayer = null;
+     let currentLang = localStorage.getItem("app_lang") || "ar";
+     let currentTheme = localStorage.getItem("app_theme") || "sand"; // sand, green, dark
+
+     function applySettings() {
+       // Theme cycling
+       document.body.classList.remove("green-theme", "dark-theme");
+       if (currentTheme === "green") {
+         document.body.classList.add("green-theme");
+         document.getElementById("btn-theme").innerHTML = `<i class="fa-solid fa-leaf" style="color: var(--color-primary);"></i>`;
+       } else if (currentTheme === "dark") {
+         document.body.classList.add("dark-theme");
+         document.getElementById("btn-theme").innerHTML = `<i class="fa-solid fa-sun" style="color: var(--color-gold);"></i>`;
+       } else { // sand
+         document.getElementById("btn-theme").innerHTML = `<i class="fa-solid fa-moon"></i>`;
+       }
+
+      // Lang direction
+      document.documentElement.lang = currentLang;
+      document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
+      
+      const headerTitle = document.getElementById("header-branch-name");
+      headerTitle.textContent = currentLang === "ar" ? `صيدليات آل مغاوري - ${traineeBranch}` : `El-Maghawry Pharmacies - ${traineeBranch}`;
+
+      const levelBadge = document.getElementById("trainee-level-badge");
+      levelBadge.textContent = langData[currentLang][`level_${traineeLevel}`] || traineeLevel;
+      levelBadge.className = `status-badge level-badge-${traineeLevel}`;
+
+      if (currentLang === "ltr") {
+        document.querySelectorAll(".card-title").forEach(el => el.style.textAlign = "left");
+        document.querySelectorAll(".check-box").forEach(el => el.style.textAlign = "left");
+        document.querySelector(".logo-section").style.textAlign = "left";
+      } else {
+        document.querySelectorAll(".card-title").forEach(el => el.style.textAlign = "right");
+        document.querySelectorAll(".check-box").forEach(el => el.style.textAlign = "right");
+        document.querySelector(".logo-section").style.textAlign = "right";
+      }
+
+      // Translate
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (langData[currentLang][key]) {
+          el.textContent = langData[currentLang][key];
+        }
+      });
+
+      const welcomeDesc = document.getElementById("dashboard-welcome-desc");
+      if (welcomeDesc && langData[currentLang].main_subtitle) {
+        welcomeDesc.innerHTML = langData[currentLang].main_subtitle;
+      }
+
+      renderPlaylist();
+      renderCertificates();
+    }
+
+    // Toggle theme
+    document.getElementById("btn-theme").addEventListener("click", () => {
+      if (currentTheme === "sand") {
+        currentTheme = "green";
+      } else if (currentTheme === "green") {
+        currentTheme = "dark";
+      } else {
+        currentTheme = "sand";
+      }
+      localStorage.setItem("app_theme", currentTheme);
+      applySettings();
+    });
+
+    // Toggle language
+    document.getElementById("btn-lang").addEventListener("click", () => {
+      currentLang = currentLang === "ar" ? "en" : "ar";
+      localStorage.setItem("app_lang", currentLang);
+      applySettings();
+    });
+
+    // Load Playlist and Watched state
+    async function loadVideos() {
+      try {
+        const response = await apiRequest({
+          action: "getTraineeVideos",
+          email: traineeEmail,
+          password: traineePassword
+        });
+
+        if (response.success) {
+          videosData = response.videos;
+          watchedVideos = response.watched;
+          traineeLevel = response.currentLevel;
+          sessionStorage.setItem("trainee_level", traineeLevel);
+          completedLevelsList = response.completedLevels || [];
+          
+          applySettings();
+
+          // Check if user has a pending promotion request
+          if (response.pendingPromotion) {
+            showPromoPending();
+          } else {
+            checkExamEligibility();
+          }
+        } else {
+          showToast(response.message, "error");
+          if (response.message.includes("غير مصرح")) logout();
+        }
+      } catch (err) {
+        showToast("Error connecting to database.", "error");
+      }
+    }
+
+    // Check if watched all to unlock exam
+    function checkExamEligibility() {
+      const examBox = document.getElementById("exam-unlock-box");
+      
+      // If trainee level is already Flyers and completed, no higher level to go (flyers is final beast level!)
+      if (traineeLevel === "Flyers" && completedLevelsList.includes("Flyers")) {
+        examBox.style.display = "none";
+        return;
+      }
+
+      if (videosData.length > 0 && videosData.every(v => watchedVideos.includes(v.VideoId))) {
+        examBox.style.display = "block";
+      } else {
+        examBox.style.display = "none";
+      }
+    }
+
+    function renderPlaylist() {
+      const container = document.getElementById("playlist-container");
+      container.innerHTML = "";
+
+      if (videosData.length === 0) {
+        container.innerHTML = `<li style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 20px;" data-i18n="loading_lectures">لا توجد محاضرات في هذا المستوى حالياً.</li>`;
+        return;
+      }
+
+      videosData.forEach(v => {
+        const isWatched = watchedVideos.includes(v.VideoId);
+        
+        const li = document.createElement("li");
+        li.className = `video-item ${currentVideoId === v.VideoId ? 'active' : ''}`;
+        li.innerHTML = `
+          <div class="video-item-title" title="${v.Title}">${v.Title}</div>
+          <span class="badge-watched ${isWatched ? 'completed' : 'pending'}">
+            ${isWatched ? '<i class="fa-solid fa-check"></i> ' + (currentLang === "ar" ? "تمت" : "Done") : '<i class="fa-solid fa-hourglass"></i> ' + (currentLang === "ar" ? "معلق" : "Pending")}
+          </span>
+        `;
+        
+        li.addEventListener("click", () => {
+          selectVideo(v.VideoId, v.Title);
+        });
+        container.appendChild(li);
+      });
+    }
+
+    function renderCertificates() {
+      const section = document.getElementById("certificates-section");
+      const container = document.getElementById("certificates-container");
+      container.innerHTML = "";
+
+      if (completedLevelsList.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      completedLevelsList.forEach(level => {
+        const titleText = langData[currentLang].cert_view_title.replace("{level}", langData[currentLang][`level_${level}`] || level);
+        
+        const li = document.createElement("li");
+        li.className = "video-item";
+        li.style.borderColor = "var(--color-gold)";
+        li.innerHTML = `
+          <div class="video-item-title" style="color: var(--color-gold); font-weight: bold;"><i class="fa-solid fa-award"></i> ${titleText}</div>
+          <span class="badge-watched completed" style="background-color: var(--color-gold); color: #000;">
+            ${langData[currentLang].btn_view_cert}
+          </span>
+        `;
+        li.addEventListener("click", () => {
+          displayCertificate(level);
+        });
+        container.appendChild(li);
+      });
+    }
+
+    function selectVideo(videoId, title) {
+      currentVideoId = videoId;
+      resetViewport();
+
+      document.getElementById("player-placeholder").style.display = "none";
+      document.getElementById("player-viewport").style.display = "block";
+      document.getElementById("playing-video-title").innerHTML = `<i class="fa-solid fa-circle-play" style="color: var(--color-primary);"></i> ${title}`;
+
+      loadYouTubePlayer(videoId);
+      renderPlaylist();
+    }
+
+    function resetViewport() {
+      document.getElementById("player-viewport").style.display = "none";
+      document.getElementById("exam-viewport").style.display = "none";
+      document.getElementById("promo-pending-viewport").style.display = "none";
+      document.getElementById("certificate-viewport").style.display = "none";
+      document.getElementById("player-placeholder").style.display = "flex";
+      checkExamEligibility();
+    }
+
+    function loadYouTubePlayer(videoId) {
+      if (ytPlayer) {
+        ytPlayer.loadVideoById(videoId);
+      } else {
+        try {
+          ytPlayer = new YT.Player('yt-player-placeholder', {
+            videoId: videoId,
+            playerVars: {
+              'autoplay': 0,
+              'controls': 1,
+              'rel': 0,
+              'showinfo': 0,
+              'modestbranding': 1,
+              'enablejsapi': 1,
+              'origin': window.location.origin
+            },
+            events: {
+              'onStateChange': onPlayerStateChange
+            }
+          });
+        } catch (e) {
+          const container = document.getElementById("yt-player-placeholder").parentElement;
+          container.innerHTML = `
+            <div class="security-watermark" id="watermark-overlay">
+              <span>${traineeName}</span>
+              <span>${traineeEmail}</span>
+              <span>PharmReady-Almaghwry</span>
+            </div>
+            <iframe id="yt-player-placeholder" src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&rel=0" allowfullscreen></iframe>
+          `;
+        }
+      }
+    }
+
+    async function onPlayerStateChange(event) {
+      if (event.data === 0 && currentVideoId) {
+        if (!watchedVideos.includes(currentVideoId)) {
+          try {
+            const response = await apiRequest({
+              action: "updateProgress",
+              email: traineeEmail,
+              password: traineePassword,
+              videoId: currentVideoId
+            });
+
+            if (response.success) {
+              watchedVideos.push(currentVideoId);
+              renderPlaylist();
+              checkExamEligibility();
+              showToast(currentLang === "ar" ? "🎉 تم تسجيل إتمام مشاهدة المحاضرة!" : "🎉 Lecture completion recorded!", "success");
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      }
+    }
+
+    // EXAMS WORKFLOW
+    document.getElementById("btn-start-exam").addEventListener("click", () => {
+      document.getElementById("player-placeholder").style.display = "none";
+      document.getElementById("exam-viewport").style.display = "block";
+      renderExamQuestions();
+    });
+
+    function renderExamQuestions() {
+      const container = document.getElementById("quiz-questions-list");
+      container.innerHTML = "";
+      
+      const questions = EXAM_QUESTIONS[traineeLevel] || [];
+      
+      questions.forEach((q, idx) => {
+        const questionText = currentLang === "ar" ? q.q : q.q_en;
+        const optionsList = currentLang === "ar" ? q.options : q.options_en;
+        
+        const qBox = document.createElement("div");
+        qBox.className = "question-box";
+        
+        let optionsHTML = "";
+        optionsList.forEach((opt, optIdx) => {
+          optionsHTML += `
+            <label class="radio-option" style="margin-bottom: 8px;">
+              <input type="radio" name="question-${idx}" value="${optIdx}" required>
+              <span class="radio-option-text">${opt}</span>
+            </label>
+          `;
+        });
+
+        qBox.innerHTML = `
+          <div class="question-text">${idx + 1}. ${questionText}</div>
+          <div class="radio-group">${optionsHTML}</div>
+        `;
+        container.appendChild(qBox);
+      });
+    }
+
+    // Quiz form submit handler
+    document.getElementById("quiz-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const questions = EXAM_QUESTIONS[traineeLevel] || [];
+      let score = 0;
+
+      questions.forEach((q, idx) => {
+        const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+        if (selected && parseInt(selected.value) === q.correct) {
+          score++;
+        }
+      });
+
+      const percentage = (score / questions.length) * 100;
+      
+      if (percentage >= 80) {
+        showToast(langData[currentLang].toast_exam_pass, "success");
+        submitPromotion(percentage);
+      } else {
+        const msg = langData[currentLang].toast_exam_fail.replace("{score}", score).replace("{total}", questions.length);
+        showToast(msg, "error");
+      }
+    });
+
+    async function submitPromotion(score) {
+      const nextLevels = {
+        "Passengers": "Starters",
+        "Starters": "Movers",
+        "Movers": "Flyers",
+        "Flyers": "Flyers"
+      };
+
+      const toLevel = nextLevels[traineeLevel];
+
+      showToast(langData[currentLang].exam_submitting, "info");
+
+      try {
+        const response = await apiRequest({
+          action: "submitPromotionRequest",
+          email: traineeEmail,
+          password: traineePassword,
+          fromLevel: traineeLevel,
+          toLevel: toLevel
+        });
+
+        if (response.success) {
+          showToast(langData[currentLang].exam_submit_ok, "success");
+          showPromoPending();
+        } else {
+          showToast(response.message, "error");
+        }
+      } catch (err) {
+        showToast("Error sending promotion request.", "error");
+      }
+    }
+
+    function showPromoPending() {
+      document.getElementById("player-placeholder").style.display = "none";
+      document.getElementById("player-viewport").style.display = "none";
+      document.getElementById("exam-viewport").style.display = "none";
+      document.getElementById("certificate-viewport").style.display = "none";
+      document.getElementById("promo-pending-viewport").style.display = "block";
+    }
+
+    // CERTIFICATES DISPLAY
+    function displayCertificate(level) {
+      document.getElementById("player-placeholder").style.display = "none";
+      document.getElementById("player-viewport").style.display = "none";
+      document.getElementById("exam-viewport").style.display = "none";
+      document.getElementById("promo-pending-viewport").style.display = "none";
+      
+      document.getElementById("cert-trainee-name").textContent = traineeName;
+      document.getElementById("cert-level-name").textContent = langData[currentLang][`level_${level}`] || level;
+      
+      // Generate a unique printable verification hash
+      const hash = "CERT-" + level.toUpperCase() + "-" + traineeName.split(" ").slice(0,2).join("").toUpperCase() + "-" + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById("cert-hash-code").textContent = hash;
+
+      document.getElementById("certificate-viewport").style.display = "block";
+    }
+
+    // YT Player API Init
+    window.onYouTubeIframeAPIReady = () => {
+      loadVideos();
+    };
+    setTimeout(() => {
+      if (videosData.length === 0) loadVideos();
+    }, 1500);
+
+    // Logout
+    function logout() {
+      sessionStorage.clear();
+      window.location.href = "index.html";
+    }
+    document.getElementById("btn-logout").addEventListener("click", logout);
+
+    // Change Password triggers
+    const chpassModal = document.getElementById("chpass-modal");
+    document.getElementById("btn-show-chpass").addEventListener("click", () => {
+      chpassModal.classList.add("active");
+    });
+    const closeModal = () => {
+      chpassModal.classList.remove("active");
+      document.getElementById("chpass-form").reset();
+    };
+    document.getElementById("btn-close-chpass").addEventListener("click", closeModal);
+    document.getElementById("btn-cancel-chpass").addEventListener("click", closeModal);
+
+    document.getElementById("chpass-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const oldPass = document.getElementById("old-pass").value.trim();
+      const newPass = document.getElementById("new-pass").value.trim();
+      const confirmPass = document.getElementById("confirm-pass").value.trim();
+
+      if (newPass !== confirmPass) {
+        showToast(langData[currentLang].err_chpass_match, "error");
+        return;
+      }
+      if (oldPass !== traineePassword) {
+        showToast(langData[currentLang].err_chpass_curr, "error");
+        return;
+      }
+
+      const btnSubmit = e.target.querySelector("button[type='submit']");
+      btnSubmit.disabled = true;
+
+      try {
+        const response = await apiRequest({
+          action: "changePassword",
+          email: traineeEmail,
+          oldPassword: oldPass,
+          newPassword: newPass
+        });
+
+        if (response.success) {
+          sessionStorage.setItem("trainee_password", newPass);
+          showToast(langData[currentLang].toast_chpass_success, "success");
+          closeModal();
+        } else {
+          showToast(response.message, "error");
+        }
+      } catch (err) {
+        showToast("Error updating password.", "error");
+      } finally {
+        btnSubmit.disabled = false;
+      }
+    });
+
+    // SECURITY OVERRIDES
+    document.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "F12") e.preventDefault();
+      if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "i" || e.key === "j")) e.preventDefault();
+      if (e.ctrlKey && (e.key === "U" || e.key === "u" || e.key === "S" || e.key === "s")) e.preventDefault();
+    });
+
+    let devtoolsOpen = false;
+    const threshold = 160;
+    setInterval(() => {
+      const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+      const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+      if (widthThreshold || heightThreshold) {
+        if (!devtoolsOpen) {
+          devtoolsOpen = true;
+          document.getElementById("video-wrapper").style.display = "none";
+          showToast("DevTools detected. Playback suspended.", "error");
+        }
+      } else {
+        if (devtoolsOpen) {
+          devtoolsOpen = false;
+          document.getElementById("video-wrapper").style.display = "block";
+        }
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
