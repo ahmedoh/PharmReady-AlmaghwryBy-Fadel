@@ -112,6 +112,17 @@ function handleRequest(e) {
   }
 }
 
+// Helper to compare phone numbers reliably even if Google Sheets stripped the leading '0'
+function phonesMatch(phone1, phone2) {
+  var p1 = String(phone1 || "").trim().replace(/\D/g, "");
+  var p2 = String(phone2 || "").trim().replace(/\D/g, "");
+  
+  if (p1.charAt(0) === '0') p1 = p1.substring(1);
+  if (p2.charAt(0) === '0') p2 = p2.substring(1);
+  
+  return p1 === p2 && p1.length > 0;
+}
+
 function initSheets(spreadsheet) {
   var sheetsNeeded = [
     { 
@@ -155,12 +166,10 @@ function initSheets(spreadsheet) {
       sh.appendRow(s.headers);
       sh.setFrozenRows(1);
       
-      // Seed default questions if Questions sheet is new
       if (s.name === "Questions") {
         seedDefaultQuestions(sh);
       }
       
-      // Seed default admin if Admins sheet is new
       if (s.name === "Admins") {
         sh.appendRow([new Date(), "madmody", "madmody", "Owner"]);
       }
@@ -170,22 +179,13 @@ function initSheets(spreadsheet) {
 
 function seedDefaultQuestions(sh) {
   var defaultQuestions = [
-    // Passengers (Level 0)
     ["Passengers", "ما هو الهدف الأساسي من آداب وأخلاقيات مهنة الصيدلة؟", "What is the primary goal of pharmacy professional ethics?", "زيادة أرباح الصيدلية المادية بأي طريقة كانت.", "Increasing pharmacy profits by any means.", "تقديم مصلحة ورعاية المريض بأعلى معايير الأمان والأخلاق.", "Prioritizing patient care and safety with the highest ethical standards.", "التنافس غير الشريف مع الصيدليات المجاورة.", "Unfair competition with neighboring pharmacies.", "1"],
     ["Passengers", "ما هي درجة الحرارة المناسبة لتخزين الأنسولين واللقاحات الحيوية؟", "What is the appropriate storage temperature for insulin and vaccines?", "في درجة حرارة الغرفة العادية (25 مئوية).", "At normal room temperature (25°C).", "تحت الصفر المطلق في الفريزر.", "Below zero in the freezer.", "في الثلاجة بين درجة حرارة 2 إلى 8 درجات مئوية.", "In the refrigerator between 2°C and 8°C.", "2"],
     ["Passengers", "أين تقع جميع فروع صيدليات آل مغاوري؟", "Where are all El-Maghawry Pharmacies branches located?", "في مدينة دمياط القديمة", "In Old Damietta city", "في مدينة دمياط الجديدة فقط", "In New Damietta city only", "في القاهرة والإسكندرية", "In Cairo and Alexandria", "1"],
-    
-    // Starters (Level 1)
     ["Starters", "ما هو البروتوكول الأولي المعتمد للتعامل مع حرق من الدرجة الأولى؟", "What is the primary protocol to handle a first-degree burn?", "وضع معجون الأسنان أو الزبدة مباشرة فوق موضع الحرق.", "Applying toothpaste or butter directly onto the burn site.", "وضع ماء جاري فاتر لمدة 10-15 دقيقة ثم استخدام مرهم حروق.", "Placing under cool running water for 10-15 minutes, then using a burn ointment.", "تغطية الحرق بلاصق طبي غير معقم فوراً.", "Covering the burn immediately with a non-sterile adhesive tape.", "1"],
     ["Starters", "أي المجموعات الدوائية التالية تستخدم لخفض الحرارة وتسكين الآلام بأمان للأطفال؟", "Which of the following drug classes is used to safely reduce fever and relieve pain in children?", "مادة الباراسيتامول بالجرعة المحسوبة حسب وزن الطفل.", "Paracetamol in a calculated dose based on the child's weight.", "مادة الأسبرين بجرعات كبيرة لضمان سرعة المفعول.", "Aspirin in high doses to guarantee quick action.", "مضادات الالتهاب غير الستيرويدية دون استشارة طبية.", "Non-steroidal anti-inflammatory drugs (NSAIDs) without medical consultation.", "0"],
-    
-    // Movers (Level 2)
     ["Movers", "ما هو التحذير الحرج للغاية الذي يجب توجيهه للمريض عند صرف مضاد حيوي من عائلة (Fluoroquinolones)؟", "What is the highly critical warning when dispensing a Fluoroquinolone antibiotic?", "عدم تناوله مع الحليب أو المكملات المحتوية على الكالسيوم أو الحديد لأنه يقلل امتصاصه.", "Do not take with milk or calcium/iron supplements as it reduces absorption.", "ضرورة تناوله مع عصائر الحمضيات المركزة لزيادة قوته.", "Must be taken with concentrated citrus juices to increase strength.", "تناوله مع القهوة والشاي فقط لتجنب الدوخة.", "Take it with coffee and tea only to avoid dizziness.", "0"],
-    
-    // Flyers (Level 3)
     ["Flyers", "عند تحضير تركيبة صيدلانية تجميلية تحتوي على فيتامين C، كيف يجب حماية المستحضر من الأكسدة؟", "When preparing a formulation containing Vitamin C, how should you protect it from oxidation?", "تعبئته في عبوات زجاجية معتمة أو داكنة اللون، وحفظه في مكان بارد وبعيد عن الضوء والهواء.", "Packaging it in opaque or dark amber glass bottles, storing it in a cool place away from light and air.", "إضافة كميات كبيرة من الكحول الطبي لتعقيم المحلول.", "Adding large amounts of rubbing alcohol to sterilize the solution.", "تركه معرضاً للهواء المباشر والضوء لتنشيط الجزيئات.", "Leaving it exposed to direct air and light to activate vitamin molecules.", "0"],
-    
-    // Beast (Level 4)
     ["Beast", "ما هي المعادلة الذهبية المتبعة لإدارة طلبيات الأدوية والنواقص في الصيدلية لضمان عدم ركود البضائع؟", "What is the golden equation for managing drug orders and shortages in the pharmacy to avoid stagnant stock?", "شراء كميات ضخمة من جميع الأصناف دون النظر لمعدل الاستهلاك اليومي.", "Buying huge quantities of all items regardless of daily consumption rate.", "حساب معدل السحب اليومي والشهري لكل صنف، والطلب بناءً على حد الأمان والطلب الأدنى (Min/Max Level).", "Calculating daily/monthly consumption for each item and ordering based on Min/Max safety levels.", "إيقاف الطلبيات تماماً والاعتماد فقط على التبادل.", "Stopping orders completely and relying solely on stock swaps.", "1"]
   ];
   
@@ -220,7 +220,7 @@ function registerTrainee(sheet, params) {
   var phone = String(params.phone).trim();
   
   for (var i = 0; i < trainees.length; i++) {
-    if (String(trainees[i].Phone).trim() === phone) {
+    if (phonesMatch(trainees[i].Phone, phone)) {
       return { success: false, message: "رقم الهاتف هذا مسجل بالفعل في النظام!" };
     }
   }
@@ -231,14 +231,15 @@ function registerTrainee(sheet, params) {
   }
   
   var targetLevel = params.targetLevel || "Passengers";
+  var whatsApp = params.whatsApp ? String(params.whatsApp).trim() : "لا يوجد";
   
   sh.appendRow([
     new Date(),
     params.name,
     params.age,
     params.birthYear,
-    phone,
-    params.whatsApp || "لا يوجد",
+    "'" + phone, // Force Text format
+    "'" + whatsApp, // Force Text format
     params.college,
     params.squad,
     params.university,
@@ -258,7 +259,7 @@ function checkStatus(sheet, params) {
   var phone = String(params.phone).trim();
   
   for (var i = 0; i < trainees.length; i++) {
-    if (String(trainees[i].Phone).trim() === phone) {
+    if (phonesMatch(trainees[i].Phone, phone)) {
       var t = trainees[i];
       return {
         success: true,
@@ -281,9 +282,18 @@ function loginTrainee(sheet, params) {
   
   for (var i = 0; i < trainees.length; i++) {
     var t = trainees[i];
-    if (String(t.Email).trim().toLowerCase() === email && String(t.Password).trim() === password) {
+    if (String(t.Email).trim().toLowerCase() === email) {
+      if (String(t.Password).trim() !== password) {
+        return { success: false, message: "كلمة المرور غير صحيحة." };
+      }
       if (t.Status === "blocked") {
         return { success: false, message: "تم حظر هذا الحساب من قبل الإدارة!" };
+      }
+      if (t.Status === "pending") {
+        return { success: false, message: "حسابك قيد الانتظار ولم يتم تفعيله بعد من قبل الإدارة." };
+      }
+      if (t.Status === "rejected") {
+        return { success: false, message: "تم رفض حسابك من قبل الإدارة. السبب: " + (t.RejectReason || "لا يوجد سبب محدد") };
       }
       if (t.Status === "accepted") {
         return {
@@ -299,7 +309,7 @@ function loginTrainee(sheet, params) {
       }
     }
   }
-  return { success: false, message: "البريد الإلكتروني أو كلمة المرور غير صحيحة، أو أن حسابك لم يتم قبوله بعد." };
+  return { success: false, message: "البريد الإلكتروني هذا غير مسجل في النظام." };
 }
 
 function changePassword(sheet, params) {
@@ -312,10 +322,10 @@ function changePassword(sheet, params) {
   for (var i = 0; i < trainees.length; i++) {
     var t = trainees[i];
     if (String(t.Email).trim().toLowerCase() === email && String(t.Password).trim() === oldPassword) {
-      sh.getRange(t.rowNum, 13).setValue(newPassword);
+      sh.getRange(t.rowNum, 13).setValue("'" + newPassword); // Force Text format
       
       var notifSh = sheet.getSheetByName("Notifications");
-      notifSh.appendRow([new Date(), t.Name, t.Email, newPassword]);
+      notifSh.appendRow([new Date(), t.Name, t.Email, "'" + newPassword]);
       
       return { success: true, message: "تم تغيير كلمة المرور بنجاح." };
     }
@@ -375,7 +385,6 @@ function getTraineeVideos(sheet, params) {
     }
   }
   
-  // Return exam questions loaded dynamically from sheet for their level
   var allQuestions = getSheetData(sheet, "Questions");
   var levelQuestions = [];
   for (var q = 0; q < allQuestions.length; q++) {
@@ -390,12 +399,10 @@ function getTraineeVideos(sheet, params) {
     }
   }
   
-  // Helper to filter empty options
   function allAllOption(val) {
     return val && String(val).trim() ? String(val).trim() : "";
   }
   
-  // Re-format levelQuestions slightly to match frontend expected structure
   var cleanQuestions = levelQuestions.map(function(item) {
     return {
       q: item.q,
@@ -492,12 +499,12 @@ function submitPromotionRequest(sheet, params) {
 }
 
 function verifyAdminCredential(sheet, adminPassword) {
-  var pass = String(adminPassword).trim().toLowerCase();
-  if (pass === "madmody") return true; // Creator/owner fallback
+  var pass = String(adminPassword).trim();
+  if (pass === "madmody") return true; 
   
   var admins = getSheetData(sheet, "Admins");
   for (var i = 0; i < admins.length; i++) {
-    if (String(admins[i].Password).trim().toLowerCase() === pass) {
+    if (String(admins[i].Password).trim() === pass) {
       return true;
     }
   }
@@ -505,7 +512,7 @@ function verifyAdminCredential(sheet, adminPassword) {
 }
 
 function adminLogin(sheet, params) {
-  var password = String(params.password).trim().toLowerCase();
+  var password = String(params.password).trim();
   if (verifyAdminCredential(sheet, password)) {
     return { success: true, message: "تم تسجيل الدخول بنجاح كمدير." };
   }
@@ -532,11 +539,11 @@ function adminAction(sheet, params) {
   
   for (var i = 0; i < trainees.length; i++) {
     var t = trainees[i];
-    if (String(t.Phone).trim() === phone) {
+    if (phonesMatch(t.Phone, phone)) {
       if (actionState === "accept") {
         sh.getRange(t.rowNum, 11).setValue("accepted");
         sh.getRange(t.rowNum, 12).setValue(params.generatedEmail);
-        sh.getRange(t.rowNum, 13).setValue(params.generatedPassword);
+        sh.getRange(t.rowNum, 13).setValue("'" + params.generatedPassword); // Force Text format
         sh.getRange(t.rowNum, 14).setValue("");
         sh.getRange(t.rowNum, 15).setValue(params.currentLevel || t.CurrentLevel || "Passengers");
       } else {
@@ -686,7 +693,7 @@ function adminAddAdmin(sheet, params) {
     return { success: false, message: "غير مصرح بالعملية." };
   }
   var sh = sheet.getSheetByName("Admins");
-  sh.appendRow([new Date(), params.username.trim(), params.password.trim(), params.role || "Admin"]);
+  sh.appendRow([new Date(), params.username.trim(), "'" + params.password.trim(), params.role || "Admin"]);
   return { success: true, message: "تم إضافة المدير الجديد بنجاح." };
 }
 
@@ -744,7 +751,7 @@ function adminEditTrainee(sheet, params) {
   
   for (var i = 0; i < trainees.length; i++) {
     var t = trainees[i];
-    if (String(t.Phone).trim() === phone) {
+    if (phonesMatch(t.Phone, phone)) {
       sh.getRange(t.rowNum, 2).setValue(params.name); // Name
       sh.getRange(t.rowNum, 12).setValue(params.email); // Email
       sh.getRange(t.rowNum, 15).setValue(params.level); // CurrentLevel
@@ -766,7 +773,7 @@ function adminToggleBlockTrainee(sheet, params) {
   
   for (var i = 0; i < trainees.length; i++) {
     var t = trainees[i];
-    if (String(t.Phone).trim() === phone) {
+    if (phonesMatch(t.Phone, phone)) {
       sh.getRange(t.rowNum, 11).setValue(state); // Status
       return { success: true, message: state === "blocked" ? "تم حظر الحساب بنجاح." : "تم تنشيط الحساب بنجاح." };
     }
@@ -848,7 +855,7 @@ function adminUpdateReportStatus(sheet, params) {
   var reports = getSheetData(sheet, "Reports");
   var email = String(params.email).trim().toLowerCase();
   var timestamp = String(params.timestamp).trim();
-  var status = params.status; // "accepted", "needs_revision", "rejected"
+  var status = params.status; 
   var comment = params.comment || "";
   
   for (var i = 0; i < reports.length; i++) {
@@ -879,4 +886,3 @@ function adminGetProgress(sheet, params) {
   var progress = getSheetData(sheet, "Progress");
   return { success: true, progress: progress };
 }
-
