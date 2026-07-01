@@ -8,12 +8,25 @@
  *    using browser LocalStorage, allowing you to test everything immediately without Google Sheets!
  */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbwYcSrLslXgn6SXyukWpGeDDUU7TT9HJwHk0G-u0s78x55KXRlQX5RT5CSmaFiJHzID/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxKnrNQQdFr5yuwdwjfBczvamkkhdNqto9LRg1JGUDUhOmQYV1SJXtCYcpVtJlBa2Nd6A/exec";
 
 // Check if we are running in Demo Mode (checks if placeholder is still present)
 const isDemoMode = !API_URL || API_URL.includes("YOUR_GOOGLE_APPS_SCRIPT");
 
 console.log(isDemoMode ? "🚀 Running in DEMO MODE (using LocalStorage)" : "🌐 Running in CLOUD MODE (connected to Google Sheets)");
+
+/**
+ * Helper to compare phone numbers reliably even if leading zero is stripped
+ */
+function phonesMatch(phone1, phone2) {
+  var p1 = String(phone1 || "").trim().replace(/\D/g, "");
+  var p2 = String(phone2 || "").trim().replace(/\D/g, "");
+  
+  if (p1.charAt(0) === '0') p1 = p1.substring(1);
+  if (p2.charAt(0) === '0') p2 = p2.substring(1);
+  
+  return p1 === p2 && p1.length > 0;
+}
 
 /**
  * API Request Wrapper
@@ -139,10 +152,10 @@ function handleDemoRequest(params) {
 
   // Helper helper
   const verifyLocalAdmin = (pass) => {
-    const trimmedPass = String(pass).trim().toLowerCase();
+    const trimmedPass = String(pass).trim();
     if (trimmedPass === "madmody") return true;
     const admins = getTable("Admins");
-    return admins.some(x => String(x.Password).trim().toLowerCase() === trimmedPass);
+    return admins.some(x => String(x.Password).trim() === trimmedPass);
   };
 
   // API router
@@ -150,7 +163,7 @@ function handleDemoRequest(params) {
     const trainees = getTable("Trainees");
     const phone = String(params.phone).trim();
     
-    if (trainees.some(t => String(t.Phone).trim() === phone)) {
+    if (trainees.some(t => phonesMatch(t.Phone, phone))) {
       return { success: false, message: "رقم الهاتف هذا مسجل بالفعل في النظام!" };
     }
     
@@ -182,7 +195,7 @@ function handleDemoRequest(params) {
   } else if (action === "checkStatus") {
     const trainees = getTable("Trainees");
     const phone = String(params.phone).trim();
-    const t = trainees.find(x => String(x.Phone).trim() === phone);
+    const t = trainees.find(x => phonesMatch(x.Phone, phone));
     
     if (t) {
       return {
@@ -201,11 +214,21 @@ function handleDemoRequest(params) {
     const trainees = getTable("Trainees");
     const email = String(params.email).trim().toLowerCase();
     const password = String(params.password).trim();
-    const t = trainees.find(x => String(x.Email).trim().toLowerCase() === email && String(x.Password).trim() === password);
+    
+    const t = trainees.find(x => String(x.Email).trim().toLowerCase() === email);
     
     if (t) {
+      if (String(t.Password).trim() !== password) {
+        return { success: false, message: "كلمة المرور غير صحيحة." };
+      }
       if (t.Status === "blocked") {
         return { success: false, message: "تم حظر هذا الحساب من قبل الإدارة!" };
+      }
+      if (t.Status === "pending") {
+        return { success: false, message: "حسابك قيد الانتظار ولم يتم قبوله بعد من قبل الإدارة." };
+      }
+      if (t.Status === "rejected") {
+        return { success: false, message: "تم رفض حسابك من قبل الإدارة. السبب: " + (t.RejectReason || "لا يوجد سبب محدد") };
       }
       if (t.Status === "accepted") {
         return {
@@ -220,7 +243,7 @@ function handleDemoRequest(params) {
         };
       }
     }
-    return { success: false, message: "البريد الإلكتروني أو كلمة المرور غير صحيحة، أو أن حسابك لم يتم قبوله بعد." };
+    return { success: false, message: "البريد الإلكتروني هذا غير مسجل في النظام." };
     
   } else if (action === "changePassword") {
     const trainees = getTable("Trainees");
@@ -365,7 +388,7 @@ function handleDemoRequest(params) {
     const phone = String(params.phone).trim();
     const actionState = params.actionState;
     
-    const tIndex = trainees.findIndex(x => String(x.Phone).trim() === phone);
+    const tIndex = trainees.findIndex(x => phonesMatch(x.Phone, phone));
     if (tIndex !== -1) {
       if (actionState === "accept") {
         trainees[tIndex].Status = "accepted";
@@ -537,7 +560,7 @@ function handleDemoRequest(params) {
     }
     const trainees = getTable("Trainees");
     const phone = String(params.phone).trim();
-    const tIndex = trainees.findIndex(x => String(x.Phone).trim() === phone);
+    const tIndex = trainees.findIndex(x => phonesMatch(x.Phone, phone));
     if (tIndex !== -1) {
       trainees[tIndex].Name = params.name;
       trainees[tIndex].Email = params.email;
@@ -554,7 +577,7 @@ function handleDemoRequest(params) {
     }
     const trainees = getTable("Trainees");
     const phone = String(params.phone).trim();
-    const tIndex = trainees.findIndex(x => String(x.Phone).trim() === phone);
+    const tIndex = trainees.findIndex(x => phonesMatch(x.Phone, phone));
     if (tIndex !== -1) {
       trainees[tIndex].Status = params.state;
       saveTable("Trainees", trainees);
